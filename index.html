@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Curio Handyman Co. — Stanwood &amp; Camano Island, WA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brown: #2a1e10;
+  --brown-dark: #1a1008;
+  --gold: #FFC425;
+  --gold-dark: #c49a1a;
+  --white: #ffffff;
+  --black: #111111;
+}
+html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; max-width: 100vw; }
+html { scroll-behavior: smooth; background: #0e0804; margin: 0; padding: 0; min-height: 100%; }
+body { font-family: 'Archivo', sans-serif; background: #0e0804; color: var(--white); }
+section { display: block; margin: 0; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; }
+
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: transparent;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 3.75rem;
+  height: 124px;
+  border-bottom: none;
+}
+.header-logo { display: flex; justify-content: center; padding: 0 2.5rem; }
+.header-logo img { height: 108px; width: auto; }
+.header-left { display: flex; align-items: center; justify-content: flex-start; }
+.header-right { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+.header-nav { display: flex; align-items: center; gap: 2rem; }
+.header-nav a {
+  color: var(--gold);
+  text-decoration: none;
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 600; font-size: 0.9rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  opacity: 0.9; transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.header-nav a:hover { opacity: 1; }
+.social-icons { display: flex; gap: 1.2rem; align-items: center; }
+.social-icons a { color: var(--white); text-decoration: none; opacity: 0.85; transition: opacity 0.2s; }
+.social-icons a:hover { opacity: 1; }
+.social-icons svg { width: 20px; height: 20px; fill: currentColor; }
+
+
+/* ── HERO ── */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: url('images/hero-desktop.jpg') center center / cover no-repeat;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -5%;
+  background: url('images/hero-desktop.jpg') center center / cover no-repeat;
+  transform: rotate(-0.5deg);
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(to bottom, rgba(10,6,2,0.65) 0%, rgba(10,6,2,0) 25%),
+    linear-gradient(to right, rgba(15,9,3,0.88) 35%, rgba(15,9,3,0.4) 70%, rgba(15,9,3,0.1) 100%);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 10rem 2rem 4rem 5vw;
+  max-width: 680px;
+}
+.hero-headline {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 5vw, 4.2rem);
+  line-height: 1.02;
+  white-space: nowrap;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+.hero-headline .gold { color: var(--gold); }
+.hero-sub-break { display: none; }
+.hero-sub-sep { display: inline; }
+.hero-sub {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700; font-size: 1.2rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin: 1.4rem 0 1.4rem;
+  opacity: 0.95;
+}
+.hero-tagline {
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.4rem;
+  display: flex; align-items: center; gap: 1.2rem;
+}
+.hero-tagline img { width: 36px; height: 36px; border-radius: 50%; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--gold); color: var(--black);
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700; font-size: 0.9rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.9rem 2rem; text-decoration: none;
+  transition: background 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { background: #e6b020; }
+.btn-outline {
+  background: transparent; color: var(--white);
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700; font-size: 0.9rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.9rem 2rem; text-decoration: none;
+  border: 2px solid var(--white);
+  transition: all 0.2s;
+  display: inline-block;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+/* ── SERVICES ── */
+#services {
+  background: var(--brown);
+  padding: 5rem 5vw 3rem;
+}
+.section-title {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 800; font-size: clamp(2.5rem, 5vw, 4rem);
+  color: var(--gold); text-transform: none;
+  margin-bottom: 1.2rem;
+}
+.section-intro {
+  font-size: 1.05rem; font-weight: 600;
+  max-width: 540px; line-height: 1.6;
+  margin-bottom: 3.5rem;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem 3rem;
+}
+.service-item { }
+.service-name {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.6rem;
+}
+.service-desc {
+  font-size: 0.9rem; line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ── ABOUT ── */
+#about {
+  position: relative;
+  background: var(--gold);
+  padding: 4rem 5vw 5rem;
+  color: var(--black);
+}
+.about-wave {
+  position: absolute; top: -60px; left: 0; right: 0;
+  height: 80px; overflow: hidden;
+}
+.about-wave svg { width: 100%; height: 100%; display: block; }
+.about-text { max-width: 100%; margin-bottom: 4rem; }
+.about-text .section-title { color: var(--black); }
+.about-text p {
+  font-size: 1.2rem; font-weight: 600;
+  line-height: 1.7; margin-bottom: 1.2rem;
+}
+.about-photos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  align-items: end;
+}
+.about-photo {
+  overflow: hidden;
+  background: rgba(0,0,0,0.1);
+}
+.about-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.about-photo:nth-child(1) { height: 380px; }
+.about-photo:nth-child(2) { height: 440px; margin-top: -60px; }
+.about-photo:nth-child(3) { height: 400px; }
+.about-photo:nth-child(4) { height: 360px; margin-top: -40px; }
+
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; cursor: pointer; padding: 4px; background: none; border: none;
+    z-index: 200; color: #fff;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: currentColor; transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-nav {
+    display: none; position: fixed; inset: 0; z-index: 150;
+    background: rgba(26,16,8,0.98);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 2.5rem;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    font-family: 'Archivo Narrow', sans-serif;
+    font-size: 2.2rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--white); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--gold); }
+  .header-socials { display: flex; align-items: center; gap: 1rem; }
+  .header-socials a { color: var(--gold); opacity: 0.8; transition: opacity 0.2s; text-decoration: none; display: flex; }
+  .header-socials a:hover { opacity: 1; }
+  .desktop-only { display: flex; }
+  .mobile-only { display: none; }
+
+/* ── GALLERY ── */
+#gallery {
+  background: var(--white);
+  padding: 4rem 0 5rem;
+  color: var(--black);
+}
+.gallery-header { padding: 0 5vw; margin-bottom: 2.5rem; }
+.gallery-header .section-title { color: var(--black); }
+.gallery-track-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  position: relative;
+}
+.gallery-track-wrap::-webkit-scrollbar { display: none; }
+.gallery-track {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0 5vw;
+  width: max-content;
+}
+.gallery-item { flex: 0 0 460px; }
+.gallery-item img {
+  width: 100%; height: 480px;
+  object-fit: cover; display: block;
+}
+.gallery-caption {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--black); margin-top: 0.75rem;
+}
+.gallery-btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(0,0,0,0.6); color: var(--white);
+  border: none; cursor: pointer; font-size: 1.3rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+.gallery-btn:hover { background: rgba(0,0,0,0.85); }
+.gallery-btn-prev { left: 1rem; }
+.gallery-btn-next { right: 1rem; }
+.gallery-wrap-outer { position: relative; }
+
+/* ── CONTACT ── */
+#contact {
+  background: var(--brown-dark);
+  padding: 5rem 5vw;
+  border-top: 3px solid var(--gold);
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+.contact-info .section-title { color: var(--gold); margin-bottom: 1.2rem; }
+.contact-info p {
+  font-size: 1rem; line-height: 1.7;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 2rem;
+}
+.contact-detail {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+.contact-detail a { color: var(--gold); text-decoration: none; }
+.contact-detail a:hover { text-decoration: underline; }
+.contact-label {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-size: 0.72rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+  display: block; margin-bottom: 2px;
+}
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-size: 0.72rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(255,255,255,0.5);
+}
+.form-group input, .form-group textarea, .form-group select {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,196,37,0.3);
+  color: var(--white);
+  font-family: 'Archivo', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.form-group input:disabled, .form-group textarea:disabled { opacity: 0.6; cursor: not-allowed; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color: var(--gold);
+}
+.form-group textarea { resize: vertical; min-height: 130px; }
+.form-group select { appearance: none; cursor: pointer; }
+.form-group select option { background: var(--brown-dark); color: var(--white); }
+.btn-submit {
+  background: var(--gold); color: var(--black);
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700; font-size: 0.95rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 1rem 2.5rem; border: none; cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.2s;
+}
+.btn-submit:hover { background: #e6b020; }
+.form-success {
+  display: none; background: rgba(255,196,37,0.1);
+  border: 1px solid var(--gold);
+  padding: 1.2rem 1.5rem; color: var(--gold);
+  font-weight: 600; margin-top: 0.5rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #0e0804;
+  padding: 2rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  border: none;
+  box-sizing: border-box;
+}
+footer img { height: 32px; width: auto; opacity: 0.8; }
+.footer-text {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-size: 0.78rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+}
+.footer-social { display: flex; gap: 1.2rem; align-items: center; }
+.footer-social a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+.footer-social a:hover { color: var(--gold); }
+.footer-social svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* ── MOBILE ── */
+.header-socials { display: flex; align-items: center; gap: 1rem; }
+  .header-socials a { color: var(--gold); opacity: 0.8; transition: opacity 0.2s; text-decoration: none; display: flex; }
+  .header-socials a:hover { opacity: 1; }
+  .desktop-only { display: flex; }
+.mobile-only { display: none; }
+
+@media (max-width: 1200px) {
+  .header-logo img { height: 90px; }
+  header { height: 108px; }
+  header { padding: 0 2.5rem; }
+}
+
+@media (max-width: 900px) {
+  header { grid-template-columns: 1fr auto 1fr; height: 102px; padding: 0 1.5rem; }
+  .header-left { display: flex; }
+  .header-nav { display: none !important; }
+  .header-logo img { height: 82px; }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+  .hamburger { color: #fff !important; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 2.5rem; }
+  .about-photos { grid-template-columns: repeat(2, 1fr); }
+  .about-photo:nth-child(1), .about-photo:nth-child(2),
+  .about-photo:nth-child(3), .about-photo:nth-child(4) {
+    height: 280px; margin-top: 0;
+  }
+  .contact-grid { grid-template-columns: 1fr 1fr; gap: 2rem; grid-template-rows: auto auto; }
+  .contact-grid > .contact-info { grid-column: 1; grid-row: 1; }
+  .contact-raccoon { grid-column: 2; grid-row: 1; display: flex !important; align-items: center; justify-content: center; }
+  .contact-grid > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  .contact-raccoon-mobile { display: none !important; }
+  .gallery-item { flex: 0 0 320px; }
+  .gallery-item img { height: 340px; }
+  .hero-content { padding-top: 2rem; }
+  .hero { background-image: url('images/hero-tablet.jpg'); }
+
+}
+@media (max-width: 600px) {
+  header { height: 70px; padding: 0 1rem; }
+  .header-nav { display: none; }
+  .header-logo img { height: 52px; }
+  .hero { background-image: url('images/hero-mobile.jpg'); }
+  .hero-content { padding: 3rem 1.8rem; max-width: 100%; box-sizing: border-box; }
+  .hero-headline { font-size: clamp(1.4rem, 5.5vw, 2.2rem); white-space: nowrap; }
+  .hero-sub { white-space: normal; font-size: 1.15rem; }
+  .hero-btns { flex-direction: column; gap: 0.8rem; }
+  .btn-primary, .btn-outline { width: 100%; text-align: center; }
+  #services, #about, #gallery .gallery-header, #contact { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .gallery-track { padding: 0 2rem; gap: 1rem; }
+  .gallery-track-wrap { scroll-snap-type: x mandatory; scroll-padding: 0 11vw; }
+  .services-grid { grid-template-columns: 1fr; }
+  .about-photos { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .about-photo:nth-child(1), .about-photo:nth-child(2),
+  .about-photo:nth-child(3), .about-photo:nth-child(4) {
+    height: 200px;
+  }
+  .form-row { grid-template-columns: 1fr; }
+  .gallery-item { flex: 0 0 78vw; scroll-snap-align: center; }
+  .gallery-item img { height: 260px; }
+  footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .hero-sub-break { display: block; margin: 0.5rem 0; }
+  .hero-sub-sep { display: none; }
+  .hero-sub { white-space: normal; }
+  .about-text p { font-size: 1rem; }
+  .contact-raccoon-mobile { display: flex !important; justify-content: center; margin-top: 2rem; }
+  .contact-raccoon { display: none !important; }
+  .contact-grid { grid-template-columns: 1fr !important; }
+  .contact-grid > .contact-info { grid-column: 1 !important; grid-row: 1 !important; }
+  .contact-grid > div:nth-child(2) { grid-column: 1 !important; grid-row: 2 !important; }
+}
+
+@media (max-width: 600px) {
+
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left" style="display:flex;align-items:center;justify-content:flex-end;">
+    <nav class="header-nav desktop-only">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+    </nav>
+    <button class="hamburger mobile-only" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="header-logo" style="padding:0 2.5rem;">
+    <a href="#"><img src="images/logo.png" alt="Curio Handyman Co."/></a>
+  </div>
+  <div class="header-right" style="display:flex;align-items:center;justify-content:flex-start;gap:1.5rem;">
+    <nav class="header-nav desktop-only">
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="https://www.instagram.com/curiohandyman/" target="_blank" rel="noopener" aria-label="Instagram" class="desktop-only" style="color:var(--gold);opacity:0.8;transition:opacity 0.2s;text-decoration:none;display:flex;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="var(--gold)"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#gallery" onclick="closeMobileNav()">Gallery</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-headline">
+      Ready to check off<br>
+      <span class="gold">that to-do list?</span>
+    </h1>
+    <p class="hero-sub">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home Improvements<span class="hero-sub-sep">&nbsp;&nbsp;</span><span class="hero-sub-break"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px;"><path d="M15 12l-8.5 8.5a2.12 2.12 0 0 1-3-3L12 9"/><path d="M17.64 15L22 10.64"/><path d="M20.91 11.7l-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg> Repairs<span class="hero-sub-sep">&nbsp;&nbsp;</span><span class="hero-sub-break"></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Maintenance
+</p>
+    <p class="hero-tagline">
+  <em>DON'T WORRY-O, CALL CURIO!</em>
+</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Request a Quote</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2 class="section-title">What We Do</h2>
+  <p class="section-intro">From quick fixes to bigger projects here's some examples of what we handle. Don't see what you need? Reach out. Chances are we can help.</p>
+  <div class="services-grid">
+    <div class="service-item">
+      <div class="service-name">Carpentry</div>
+      <p class="service-desc">Shelving, cabinets, decks, fences, framing and custom woodworking.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Exterior Cleanup</div>
+      <p class="service-desc">Gutters, pressure washing, siding, maintenance.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Interior Repairs</div>
+      <p class="service-desc">Drywall, doors, windows, trim, caulking, paint touch-ups.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Assembly &amp; Install</div>
+      <p class="service-desc">Furniture, TV mounts, smart home devices, picture hanging.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Small Engine Repair</div>
+      <p class="service-desc">Mowers, string trimmers, chainsaws, generators.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Fabrication</div>
+      <p class="service-desc">Welding, cutting, 3D printing, CAD design.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Plumbing Basics</div>
+      <p class="service-desc">Faucets, disposals, toilets, drain cleaning, and minor leaks.</p>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Electrical Basics</div>
+      <p class="service-desc">Outlets, switches, ceiling fans, light fixtures.</p>
+    </div>
+  </div>
+
+<!-- WAVE DIVIDER: services → about -->
+<div style="background: #FFC425; line-height:0; margin:0; padding:0; overflow:hidden; display:block; position:relative; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw; width:100vw;">
+  <svg viewBox="0 0 1440 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:clamp(80px,12vw,180px);">
+    <path d="M0,0 L1440,0 L1440,60 C1080,60 720,150 360,150 C240,150 120,120 0,100 Z" fill="#2a1e10"/>
+  </svg>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+
+  <div class="about-text">
+    <h2 class="section-title">About</h2>
+    <p>Hi, I'm Eric. I grew up in a construction family, so tools and job sites were my playground. That upbringing turned into an obsession with learning how things work, and more importantly, how to fix them when they don't.</p>
+    <p>The name Curio comes from curiosity, "a strong desire to know or learn something." That sums me up pretty well. Over the years that curiosity has taken me many places: property management, software engineering, farming, salmon processing, painting, drafting, tiny house design and construction, web development, and more.</p>
+    <p>The common thread I found through all of those experiences is that I love solving problems, fixing things that are broken, and serving my community. Being a handyman gives me the opportunity to use my tools, experience, and abilities to do those things.</p>
+    <p>My wife Olivia and I live in Stanwood/Camano in a tiny house that we built together. I look forward to working with you!</p>
+  </div>
+  <div class="about-photos">
+    <div class="about-photo"><img src="images/about-1.jpg" alt="Eric working on framing"/></div>
+    <div class="about-photo"><img src="images/about-2.jpg" alt="Young Eric on a job site"/></div>
+    <div class="about-photo"><img src="images/about-3.jpg" alt="Tiny house Eric and Olivia built"/></div>
+    <div class="about-photo"><img src="images/about-4.jpg" alt="Eric"/></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header">
+    <h2 class="section-title">Past Projects</h2>
+  </div>
+  <div class="gallery-wrap-outer" style="position:relative;">
+    <div class="gallery-track-wrap" id="galleryWrap">
+      <div class="gallery-track" id="galleryTrack">
+        <div class="gallery-item">
+          <img src="images/gallery-gazebo.jpg" alt="Gazebo Benches + Bookshelf"/>
+          <div class="gallery-caption">Gazebo Benches + Bookshelf</div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-brick-path.jpg" alt="Brick Walking Path"/>
+          <div class="gallery-caption">Brick Walking Path</div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-zipline.jpg" alt="Zipline Platform"/>
+          <div class="gallery-caption">Zipline Platform</div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-attic-ladder.jpg" alt="Attic Ladder Replacement"/>
+          <div class="gallery-caption">Attic Ladder Replacement</div>
+        </div>
+        <div class="gallery-item">
+          <img src="images/gallery-bathroom.jpg" alt="Bathroom Shelf Addition"/>
+          <div class="gallery-caption">Bathroom Shelf Addition</div>
+        </div>
+      </div>
+    </div>
+    <!-- Arrows overlaid on images -->
+    <button class="gallery-btn gallery-btn-prev" id="galPrev" aria-label="Previous">&#8592;</button>
+    <button class="gallery-btn gallery-btn-next" id="galNext" aria-label="Next">&#8594;</button>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem;">
+        <h2 class="section-title" style="margin-bottom:0;">Get In Touch</h2>
+      </div>
+      <div class="contact-detail">
+        <div>
+          <span class="contact-label">Service Area</span>
+          <span style="color:rgba(255,255,255,0.8);">Snohomish &amp; Skagit Counties, Camano Island</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div>
+          <span class="contact-label">Email</span>
+          <a href="mailto:ericimpola@gmail.com">ericimpola@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div>
+          <span class="contact-label">Phone</span>
+          <a href="tel:4253195855">(425) 319-5855</a>
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" disabled/>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" disabled/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" disabled/>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" disabled/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell me about your project</label>
+          <textarea id="message" name="message" disabled placeholder="Online contact form coming soon! In the meantime reach us at ericimpola@gmail.com or (425) 319-5855"></textarea>
+        </div>
+        <button type="submit" class="btn-submit" disabled style="opacity:0.5;cursor:not-allowed;">Coming Soon</button>
+        <div class="form-success" id="formSuccess">
+          &#10003; &nbsp;Thanks! I'll be in touch within one business day.
+        </div>
+      </form>
+    </div>
+    <div class="contact-raccoon-mobile" style="display:none;justify-content:center;margin-top:2rem;">
+      <img src="images/raccoon.png" alt="Curio mascot" style="width:200px;height:200px;object-fit:cover;border-radius:50%;border:3px solid var(--gold);"/>
+    </div>
+    <div class="contact-raccoon" style="display:flex;align-items:center;justify-content:center;padding-top:2rem;">
+      <img src="images/raccoon.png" alt="Curio mascot" style="width:270px;height:270px;object-fit:cover;border-radius:50%;border:3px solid var(--gold);"/>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div style="background:#0e0804;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;width:100vw;box-sizing:border-box;">
+<footer style="max-width:100%;margin:0 auto;">
+  <img src="images/logo.png" alt="Curio Handyman Co."/>
+  <span class="footer-text">&copy; 2026 Curio Builds LLC</span>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/curiohandyman/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg></a>
+  </div>
+</footer>
+</div>
+
+<script>
+
+
+// Gallery infinite scroll + swipe
+const wrap = document.getElementById('galleryWrap');
+const track = document.getElementById('galleryTrack');
+
+// Clone items for infinite loop
+const items = Array.from(track.querySelectorAll('.gallery-item'));
+items.forEach(item => track.appendChild(item.cloneNode(true)));
+items.forEach(item => track.insertBefore(item.cloneNode(true), track.firstChild));
+
+const itemW = () => track.querySelector('.gallery-item').offsetWidth + 24;
+const totalOrigW = () => items.length * itemW();
+
+// Start in middle clone set
+function initGallery() {
+  wrap.scrollLeft = totalOrigW();
+}
+initGallery();
+
+// On scroll: jump seamlessly when hitting clone boundaries
+wrap.addEventListener('scroll', () => {
+  const max = totalOrigW() * 2;
+  const min = totalOrigW();
+  if (wrap.scrollLeft <= 0) {
+    wrap.scrollLeft = totalOrigW();
+  } else if (wrap.scrollLeft >= max) {
+    wrap.scrollLeft = totalOrigW();
+  }
+}, { passive: true });
+
+function scrollGallery(dir) {
+  wrap.scrollBy({ left: dir * itemW(), behavior: 'smooth' });
+}
+
+document.getElementById('galNext').onclick = () => scrollGallery(1);
+document.getElementById('galPrev').onclick = () => scrollGallery(-1);
+
+// Touch swipe
+let touchStartX = 0;
+wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+wrap.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) scrollGallery(diff > 0 ? 1 : -1);
+}, { passive: true });
+
+// Header: transparent over hero, brown everywhere else
+const headerEl = document.querySelector('header');
+function onScroll() {
+  const hero = document.querySelector('.hero');
+  const heroBottom = hero ? hero.offsetTop + hero.offsetHeight : window.innerHeight;
+  headerEl.style.background = (window.scrollY + 10 >= heroBottom)
+    ? 'rgba(26,16,8,0.97)'
+    : 'transparent';
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+if (hamburger && mobileNav) {
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  });
+}
+function closeMobileNav() {
+  if (hamburger) hamburger.classList.remove('open');
+  mobileNav.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Contact form
+function submitForm(e) {
+  e.preventDefault();
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('contactForm').style.opacity = '0.4';
+    document.getElementById('formSuccess').style.display = 'block';
+    btn.textContent = 'Sent!';
+  }, 800);
+}
+</script>
+</body>
+</html>
