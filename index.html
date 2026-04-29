@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Curio Handyman Co. — Stanwood &amp; Camano Island, WA</title>
+<link rel="icon" type="image/png" href="images/raccoon.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,7 +60,10 @@ header {
   min-height: 100vh;
   display: flex; align-items: center;
   overflow: hidden;
-  background: url('images/hero-desktop.jpg') center center / cover no-repeat;
+  background-image: url('images/hero-desktop.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .hero::before {
   content: '';
@@ -412,15 +416,17 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
   .contact-raccoon-mobile { display: none !important; }
   .gallery-item { flex: 0 0 320px; }
   .gallery-item img { height: 340px; }
+  .hero { background-image: url('images/hero-tablet.jpg') !important; }
+  .hero { background-image: url('images/hero-tablet.jpg') !important; background-position: center center !important; background-size: cover !important; }
   .hero-content { padding-top: 2rem; }
-  .hero { background-image: url('images/hero-tablet.jpg'); }
+  .hero { background-image: url('images/hero-tablet.jpg') !important; background-position: center center !important; background-size: cover !important; }
 
 }
 @media (max-width: 600px) {
   header { height: 70px; padding: 0 1rem; }
   .header-nav { display: none; }
   .header-logo img { height: 52px; }
-  .hero { background-image: url('images/hero-mobile.jpg'); }
+  .hero { background-image: url('images/hero-mobile.jpg') !important; background-position: center center !important; background-size: cover !important; }
   .hero-content { padding: 3rem 1.8rem; max-width: 100%; box-sizing: border-box; }
   .hero-headline { font-size: clamp(1.4rem, 5.5vw, 2.2rem); white-space: nowrap; }
   .hero-sub { white-space: normal; font-size: 1.15rem; }
@@ -582,29 +588,11 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
   <div class="gallery-wrap-outer" style="position:relative;">
     <div class="gallery-track-wrap" id="galleryWrap">
       <div class="gallery-track" id="galleryTrack">
-        <div class="gallery-item">
-          <img src="images/gallery-gazebo.jpg" alt="Gazebo Benches + Bookshelf"/>
-          <div class="gallery-caption">Gazebo Benches + Bookshelf</div>
-        </div>
-        <div class="gallery-item">
-          <img src="images/gallery-brick-path.jpg" alt="Brick Walking Path"/>
-          <div class="gallery-caption">Brick Walking Path</div>
-        </div>
-        <div class="gallery-item">
-          <img src="images/gallery-zipline.jpg" alt="Zipline Platform"/>
-          <div class="gallery-caption">Zipline Platform</div>
-        </div>
-        <div class="gallery-item">
-          <img src="images/gallery-attic-ladder.jpg" alt="Attic Ladder Replacement"/>
-          <div class="gallery-caption">Attic Ladder Replacement</div>
-        </div>
-        <div class="gallery-item">
-          <img src="images/gallery-bathroom.jpg" alt="Bathroom Shelf Addition"/>
-          <div class="gallery-caption">Bathroom Shelf Addition</div>
+        <div class="gallery-item" style="display:flex;align-items:center;justify-content:center;">
+          <div style="color:rgba(0,0,0,0.3);font-size:0.9rem;">Loading...</div>
         </div>
       </div>
     </div>
-    <!-- Arrows overlaid on images -->
     <button class="gallery-btn gallery-btn-prev" id="galPrev" aria-label="Previous">&#8592;</button>
     <button class="gallery-btn gallery-btn-next" id="galNext" aria-label="Next">&#8594;</button>
   </div>
@@ -642,30 +630,30 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
         <div class="form-row">
           <div class="form-group">
             <label for="fname">First Name</label>
-            <input type="text" id="fname" name="fname" disabled/>
+            <input type="text" id="fname" name="fname" required/>
           </div>
           <div class="form-group">
             <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lname" disabled/>
+            <input type="text" id="lname" name="lname"/>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" disabled/>
+            <input type="email" id="email" name="email" required/>
           </div>
           <div class="form-group">
             <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" disabled/>
+            <input type="tel" id="phone" name="phone"/>
           </div>
         </div>
         <div class="form-group">
           <label for="message">Tell me about your project</label>
-          <textarea id="message" name="message" disabled placeholder="Online contact form coming soon! In the meantime reach us at ericimpola@gmail.com or (425) 319-5855"></textarea>
+          <textarea id="message" name="message" required></textarea>
         </div>
-        <button type="submit" class="btn-submit" disabled style="opacity:0.5;cursor:not-allowed;">Coming Soon</button>
+        <button type="submit" class="btn-submit" id="contact-submit">Send Message</button>
         <div class="form-success" id="formSuccess">
-          &#10003; &nbsp;Thanks! I'll be in touch within one business day.
+          &#10003; &nbsp;We'll be in touch soon, thanks!
         </div>
       </form>
     </div>
@@ -692,49 +680,87 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
 <script>
 
 
-// Gallery infinite scroll + swipe
+// Gallery - dynamic from Google Sheets
+const GITHUB_RAW = 'images/';
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwmV5ozPpLjxSHy8HyIHdpm_NWuQcD6CJk40cBpzcIDJPVgFGkaVBLbzDPYDPmdwugu/exec';
+
 const wrap = document.getElementById('galleryWrap');
 const track = document.getElementById('galleryTrack');
 
-// Clone items for infinite loop
-const items = Array.from(track.querySelectorAll('.gallery-item'));
-items.forEach(item => track.appendChild(item.cloneNode(true)));
-items.forEach(item => track.insertBefore(item.cloneNode(true), track.firstChild));
+async function loadGallery() {
+  try {
+    const url = SHEETS_API + '?action=getGallery';
+    const res = await fetch(url, { redirect: 'follow' });
+    const data = await res.json();
+    const photos = data.gallery || [];
 
-const itemW = () => track.querySelector('.gallery-item').offsetWidth + 24;
-const totalOrigW = () => items.length * itemW();
-
-// Start in middle clone set
-function initGallery() {
-  wrap.scrollLeft = totalOrigW();
-}
-initGallery();
-
-// On scroll: jump seamlessly when hitting clone boundaries
-wrap.addEventListener('scroll', () => {
-  const max = totalOrigW() * 2;
-  const min = totalOrigW();
-  if (wrap.scrollLeft <= 0) {
-    wrap.scrollLeft = totalOrigW();
-  } else if (wrap.scrollLeft >= max) {
-    wrap.scrollLeft = totalOrigW();
+    if (!photos.length) {
+      // Fallback to hardcoded items if sheet is empty
+      track.innerHTML = [
+        { image: 'gallery-gazebo.jpg', caption: 'Gazebo Benches + Bookshelf' },
+        { image: 'gallery-brick-path.jpg', caption: 'Brick Walking Path' },
+        { image: 'gallery-zipline.jpg', caption: 'Zipline Platform' },
+        { image: 'gallery-attic-ladder.jpg', caption: 'Attic Ladder Replacement' },
+        { image: 'gallery-bathroom.jpg', caption: 'Bathroom Shelf Addition' },
+      ].map(p => galleryItem(GITHUB_RAW + p.image, p.caption)).join('');
+    } else {
+      track.innerHTML = photos
+        .filter(p => p.image && p.caption)
+        .map(p => galleryItem(GITHUB_RAW + p.image, p.caption))
+        .join('');
+    }
+  } catch(e) {
+    // Fallback on error
+    track.innerHTML = [
+      { image: 'gallery-gazebo.jpg', caption: 'Gazebo Benches + Bookshelf' },
+      { image: 'gallery-brick-path.jpg', caption: 'Brick Walking Path' },
+      { image: 'gallery-zipline.jpg', caption: 'Zipline Platform' },
+      { image: 'gallery-attic-ladder.jpg', caption: 'Attic Ladder Replacement' },
+      { image: 'gallery-bathroom.jpg', caption: 'Bathroom Shelf Addition' },
+    ].map(p => galleryItem(GITHUB_RAW + p.image, p.caption)).join('');
   }
-}, { passive: true });
-
-function scrollGallery(dir) {
-  wrap.scrollBy({ left: dir * itemW(), behavior: 'smooth' });
+  initInfiniteGallery();
 }
 
-document.getElementById('galNext').onclick = () => scrollGallery(1);
-document.getElementById('galPrev').onclick = () => scrollGallery(-1);
+function galleryItem(src, caption) {
+  return `<div class="gallery-item">
+    <img src="${src}" alt="${caption}"/>
+    <div class="gallery-caption">${caption}</div>
+  </div>`;
+}
 
-// Touch swipe
-let touchStartX = 0;
-wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-wrap.addEventListener('touchend', e => {
-  const diff = touchStartX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 40) scrollGallery(diff > 0 ? 1 : -1);
-}, { passive: true });
+function initInfiniteGallery() {
+  const items = Array.from(track.querySelectorAll('.gallery-item'));
+  if (!items.length) return;
+  items.forEach(item => track.appendChild(item.cloneNode(true)));
+  items.forEach(item => track.insertBefore(item.cloneNode(true), track.firstChild));
+
+  const itemW = () => track.querySelector('.gallery-item').offsetWidth + 24;
+  const totalOrigW = () => items.length * itemW();
+
+  wrap.scrollLeft = totalOrigW();
+
+  wrap.addEventListener('scroll', () => {
+    if (wrap.scrollLeft <= 0) wrap.scrollLeft = totalOrigW();
+    else if (wrap.scrollLeft >= totalOrigW() * 2) wrap.scrollLeft = totalOrigW();
+  }, { passive: true });
+
+  function scrollGallery(dir) {
+    wrap.scrollBy({ left: dir * itemW(), behavior: 'smooth' });
+  }
+
+  document.getElementById('galNext').onclick = () => scrollGallery(1);
+  document.getElementById('galPrev').onclick = () => scrollGallery(-1);
+
+  let touchStartX = 0;
+  wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) scrollGallery(diff > 0 ? 1 : -1);
+  }, { passive: true });
+}
+
+loadGallery();
 
 // Header: transparent over hero, brown everywhere else
 const headerEl = document.querySelector('header');
@@ -765,16 +791,31 @@ function closeMobileNav() {
 }
 
 // Contact form
-function submitForm(e) {
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmV5ozPpLjxSHy8HyIHdpm_NWuQcD6CJk40cBpzcIDJPVgFGkaVBLbzDPYDPmdwugu/exec';
+
+async function submitForm(e) {
   e.preventDefault();
-  const btn = document.querySelector('.btn-submit');
+  const btn = document.getElementById('contact-submit');
   btn.textContent = 'Sending…';
   btn.disabled = true;
-  setTimeout(() => {
+
+  try {
+    const url = new URL(API_URL);
+    url.searchParams.set('action', 'addLead');
+    url.searchParams.set('fname', document.getElementById('fname').value.trim());
+    url.searchParams.set('lname', document.getElementById('lname').value.trim());
+    url.searchParams.set('email', document.getElementById('email').value.trim());
+    url.searchParams.set('phone', document.getElementById('phone').value.trim());
+    url.searchParams.set('message', document.getElementById('message').value.trim());
+    await fetch(url, { method: 'GET', mode: 'no-cors' });
     document.getElementById('contactForm').style.opacity = '0.4';
     document.getElementById('formSuccess').style.display = 'block';
     btn.textContent = 'Sent!';
-  }, 800);
+  } catch(err) {
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    alert('Something went wrong. Please email ericimpola@gmail.com directly.');
+  }
 }
 </script>
 </body>

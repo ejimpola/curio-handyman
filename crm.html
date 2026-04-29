@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/png" href="images/raccoon.png"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<!-- v1776888087 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Curio Handyman Co. — CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #FFC425;
+    --gold-dim: rgba(255,196,37,0.15);
+    --brown: #3a261d;
+    --brown-deep: #2a1a10;
+    --brown-mid: #4e3326;
+    --text: #f5ead8;
+    --text-muted: #a08060;
+    --border: #2e1e0e;
+    --card: #1e1208;
+    --green: #4caf7d;
+    --red: #e05a4a;
+    --blue: #5a9fd4;
+    --amber: #e0a030;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--brown-deep);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: #150e08;
+    padding: 1.2rem 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    gap: 1rem;
+  }
+  .brand {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+  }
+  .brand span { color: var(--text); font-size: 0.65rem; letter-spacing: 0.3em; display: block; font-weight: 600; margin-top: -2px; }
+  .topbar-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* TOP NAV */
+  .top-nav {
+    background: #130c06;
+    border-bottom: 1px solid var(--border);
+    padding: 0 3.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+  }
+  .top-nav-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .top-nav-tab:hover { color: var(--text); background: rgba(255,196,37,0.05); }
+  .top-nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .nav-icon { font-size: 14px; }
+
+  /* LAYOUT */
+  .layout {
+    min-height: calc(100vh - 100px);
+  }
+
+  /* MAIN */
+  .main { padding: 2rem 3.5rem; overflow-y: auto; }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .page-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+  .page-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.15s;
+  }
+  .btn-gold { background: var(--gold); color: var(--brown-deep); }
+  .btn-gold:hover { background: #ffd060; }
+  .btn-outline { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.6rem; }
+  .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(224,90,74,0.3); }
+  .btn-danger:hover { background: rgba(224,90,74,0.1); }
+
+  /* SEARCH */
+  .search-bar {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    align-items: center;
+  }
+  .search-bar input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.9rem;
+    outline: none;
+    border-radius: 0;
+  }
+  .search-bar input:focus { border-color: var(--gold); }
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .filter-select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 0.8rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .filter-select:focus { border-color: var(--gold); }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+  }
+  .data-table td {
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid rgba(46,30,14,0.5);
+    font-size: 0.85rem;
+    vertical-align: middle;
+  }
+  .data-table tr:hover td { background: rgba(255,196,37,0.03); }
+  .data-table tr td:first-child { color: var(--gold); font-weight: 700; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.05em; }
+
+  /* STATUS BADGES */
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 0;
+    font-weight: 500;
+  }
+  .badge-lead { background: rgba(90,159,212,0.15); color: var(--blue); border: 1px solid rgba(90,159,212,0.3); }
+  .badge-scheduled { background: rgba(224,160,48,0.15); color: var(--amber); border: 1px solid rgba(224,160,48,0.3); }
+  .badge-progress { background: rgba(255,196,37,0.15); color: var(--gold); border: 1px solid rgba(255,196,37,0.3); }
+  .badge-complete { background: rgba(76,175,125,0.15); color: var(--green); border: 1px solid rgba(76,175,125,0.3); }
+  .badge-invoiced { background: rgba(160,128,96,0.15); color: #c09060; border: 1px solid rgba(160,128,96,0.3); }
+  .badge-declined { background: rgba(224,90,74,0.15); color: var(--red); border: 1px solid rgba(224,90,74,0.3); }
+
+  /* MODAL */
+  .modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-bg.open { display: flex; }
+  .modal {
+    background: #1a0e08;
+    border: 1px solid var(--gold);
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    background: #130c06;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+  .modal-close {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 1.1rem; cursor: pointer; padding: 0 4px;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 1.75rem; }
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  /* FORM */
+  .form-row { margin-bottom: 1.3rem; }
+  .form-row label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .form-row input, .form-row select, .form-row textarea {
+    width: 100%;
+    background: var(--brown-deep);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.85rem;
+    padding: 0.65rem 0.9rem;
+    outline: none;
+    border-radius: 0;
+    resize: vertical;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: var(--gold); }
+  .form-row select { color: var(--text); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+
+  /* DETAIL PANEL */
+  .detail-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid rgba(46,30,14,0.5);
+    align-items: flex-start;
+  }
+  .detail-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    min-width: 110px;
+    padding-top: 1px;
+  }
+  .detail-value { font-size: 0.88rem; color: var(--text); flex: 1; }
+
+  /* DASHBOARD CARDS */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .dash-card {
+    background: var(--card);
+    padding: 1.4rem 1.5rem;
+    border-top: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .dash-card:hover { border-top-color: var(--gold); }
+  .dash-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .dash-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #d4b87a;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .dash-desc {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 0.75rem;
+    color: #9a7a5a;
+    font-style: italic;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 0.88rem;
+  }
+
+  /* CUSTOMER JOBS DIVIDER */
+  .customer-jobs-divider {
+    margin: 1.25rem 0 0.75rem;
+    border: none;
+    border-top: 1px solid var(--gold);
+    opacity: 0.3;
+  }
+
+  /* QUICK STATUS SELECT */
+  .quick-status {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    padding: 3px 6px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .quick-status:hover, .quick-status:focus { border-color: var(--gold); color: var(--text); }
+
+  /* NOTES */
+  .notes-box {
+    background: var(--brown-deep);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.7;
+    min-height: 60px;
+  }
+
+  /* ACTION BUTTONS IN TABLE */
+  .row-actions { display: flex; gap: 6px; }
+
+  /* Hide number input spinners */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+  /* QUOTE STYLES */
+  .quote-preview {
+    background: #faf6ed;
+    color: #2a1a10;
+    padding: 2.5rem;
+    font-family: 'Libre Baskerville', serif;
+    max-width: 700px;
+    border: 1px solid #d4b87a;
+  }
+  .quote-preview-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 2px solid #FFC425; }
+  .quote-preview-brand { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.3rem; color: #2a1a10; letter-spacing: 0.1em; }
+  .quote-preview-brand-sub { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: #7a5a3a; margin-top: 2px; }
+  .quote-preview-meta { text-align: right; font-size: 0.8rem; color: #5a3a1a; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; }
+  .quote-preview-meta strong { display: block; color: #FFC425; background: #2a1a10; padding: 3px 10px; font-size: 0.7rem; letter-spacing: 0.15em; margin-bottom: 6px; text-align: center; }
+  .quote-to { margin-bottom: 1.5rem; }
+  .quote-to-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #9a7a5a; margin-bottom: 4px; }
+  .quote-to-name { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; color: #2a1a10; }
+  .quote-to-detail { font-size: 0.82rem; color: #5a3a1a; margin-top: 2px; }
+  .quote-items-table { width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; }
+  .quote-items-table th { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: #9a7a5a; padding: 6px 8px; text-align: left; border-bottom: 1px solid #d4b87a; background: #f0e8d0; }
+  .quote-items-table th { text-align: left; }
+  .quote-items-table td { padding: 8px 8px; font-size: 0.85rem; color: #2a1a10; border-bottom: 1px solid #e8dcc0; vertical-align: top; }
+  .quote-items-table td { text-align: left; word-wrap: break-word; overflow-wrap: break-word; max-width: 100%; }
+  .quote-totals { margin-left: auto; max-width: 240px; }
+  .quote-total-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.85rem; color: #3a2010; border-bottom: 1px solid #e8dcc0; }
+  .quote-total-row.grand { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; color: #2a1a10; border-top: 2px solid #FFC425; border-bottom: none; padding-top: 8px; margin-top: 4px; }
+  .quote-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #d4b87a; font-size: 0.78rem; color: #7a5a3a; font-style: italic; }
+  .quote-sig { margin-top: 1.5rem; display: flex; gap: 2rem; }
+  .quote-sig-block { flex: 1; border-top: 1px solid #9a7a5a; padding-top: 4px; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #9a7a5a; }
+  .line-item-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
+  .line-item-row input, .line-item-row select { background: var(--brown-deep); border: 1px solid var(--border); color: var(--text); font-family: 'Libre Baskerville', serif; font-size: 0.82rem; padding: 0.5rem 0.6rem; outline: none; border-radius: 0; }
+  .line-item-row input:focus, .line-item-row select:focus { border-color: var(--gold); }
+  .line-item-desc { flex: 3; }
+  .line-item-qty { flex: 0.8; }
+  .line-item-rate { flex: 1; }
+  .line-item-total { flex: 1; }
+  .line-item-del { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 0 4px; margin-top: 8px; }
+  .line-item-del:hover { color: var(--red); }
+  .quote-status-draft { background: rgba(90,159,212,0.15); color: var(--blue); border: 1px solid rgba(90,159,212,0.3); }
+  .quote-status-sent { background: rgba(224,160,48,0.15); color: var(--amber); border: 1px solid rgba(224,160,48,0.3); }
+  .quote-status-accepted { background: rgba(76,175,125,0.15); color: var(--green); border: 1px solid rgba(76,175,125,0.3); }
+  .quote-status-declined { background: rgba(224,90,74,0.15); color: var(--red); border: 1px solid rgba(224,90,74,0.3); }
+
+  /* PIPELINE VIEW */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .pipeline-col { background: var(--card); padding: 0.75rem; min-height: 300px; }
+  .pipeline-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .pipeline-count {
+    background: var(--gold-dim);
+    color: var(--gold);
+    font-size: 0.6rem;
+    padding: 1px 6px;
+  }
+  .pipeline-card {
+    background: var(--brown);
+    border: 1px solid var(--border);
+    padding: 0.65rem 0.75rem;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .pipeline-card:hover { border-color: var(--gold); }
+  .pipeline-card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  .pipeline-card-job {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .pipeline-card-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--border);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <img src="data:image/png;base64,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" alt="Curio Handyman Co." style="height:44px;width:auto;display:block;margin-bottom:3px;filter:brightness(1);"/>
+    
+  </div>
+  <div id="sync-status" style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;color:var(--text-muted);">Loading…</div>
+</div>
+
+<!-- TOP NAV -->
+<div class="top-nav">
+  <div class="top-nav-tab active" onclick="showView('dashboard', this)"><span class="nav-icon" style="font-size:17px;">⌂</span> Dashboard</div>
+  <div class="top-nav-tab" onclick="showView('customers', this)"><span class="nav-icon">గ</span> Customers</div>
+  <div class="top-nav-tab" onclick="showView('jobs', this)"><span class="nav-icon">⛏</span> Jobs</div>
+  <div class="top-nav-tab" onclick="showView('quotes', this)"><span class="nav-icon">$</span> Quotes</div>
+</div>
+
+<div class="layout">
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-subtitle">Your active jobs at a glance</div>
+        </div>
+        <div style="display:flex;gap:0.6rem;">
+          <button class="btn btn-outline btn-sm" onclick="openAddCustomer()" style="color:var(--gold);border-color:var(--gold);">+ Add Customer</button>
+          <button class="btn btn-outline btn-sm" onclick="openAddJob()" style="color:var(--gold);border-color:var(--gold);">+ Add Job</button>
+        </div>
+      </div>
+
+      <!-- Hidden stat elements still needed for renderStats JS -->
+      <span id="stat-customers" style="display:none;"></span>
+      <span id="stat-jobs" style="display:none;"></span>
+
+      <!-- 3 key stat cards -->
+      <div class="dash-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;">
+        <div class="dash-card"><div class="dash-num" id="d-leads">0</div><div class="dash-label">Leads</div><div class="dash-desc">Contacted. Quote not yet accepted or declined.</div></div>
+        <div class="dash-card"><div class="dash-num" id="d-active">0</div><div class="dash-label">Active</div><div class="dash-desc">Quote accepted. Scheduled and in progress.</div></div>
+        <div class="dash-card"><div class="dash-num" id="d-work-complete">0</div><div class="dash-label">Work Complete</div><div class="dash-desc">Work done. Invoice sent. Awaiting payment.</div></div>
+      </div>
+
+      <!-- Hidden trackers (still counted, not displayed) -->
+      <span id="d-paid-out" style="display:none;"></span>
+      <span id="d-declined" style="display:none;"></span>
+
+      <!-- Pipeline columns — Lead, Active, Work Complete only -->
+      <div class="pipeline" style="grid-template-columns:repeat(3,1fr);">
+        <div class="pipeline-col">
+          <div class="pipeline-header">Leads <span class="pipeline-count" id="pc-lead">0</span></div>
+          <div id="pipe-lead"></div>
+        </div>
+        <div class="pipeline-col">
+          <div class="pipeline-header">Active <span class="pipeline-count" id="pc-active">0</span></div>
+          <div id="pipe-active"></div>
+        </div>
+        <div class="pipeline-col">
+          <div class="pipeline-header">Work Complete <span class="pipeline-count" id="pc-work-complete">0</span></div>
+          <div id="pipe-work-complete"></div>
+        </div>
+      </div>
+
+      <!-- Hidden pipeline cols still needed for renderPipeline -->
+      <div style="display:none;">
+        <div id="pipe-paid-out"></div>
+        <div id="pipe-declined"></div>
+        <span id="pc-paid-out"></span>
+        <span id="pc-declined"></span>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="view" id="view-customers">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Customers</div>
+          <div class="page-subtitle">All customer records</div>
+        </div>
+        <button class="btn btn-gold" onclick="openAddCustomer()">+ Add Customer</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="customer-search" placeholder="Search by name, phone, or city…" oninput="renderCustomers()"/>
+      </div>
+      <table class="data-table" id="customers-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Jobs</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="customers-body">
+          <tr><td colspan="6"><div class="empty">No customers yet.</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- JOBS -->
+    <div class="view" id="view-jobs">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Jobs</div>
+          <div class="page-subtitle">All job records</div>
+        </div>
+        <button class="btn btn-gold" onclick="openAddJob()">+ Add Job</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="job-search" placeholder="Search jobs…" oninput="renderJobs()"/>
+        <select class="filter-select" id="job-filter" onchange="renderJobs()">
+          <option value="">All Statuses</option>
+          <option value="lead">Lead</option>
+          <option value="active">Active</option>
+          <option value="work_complete">Work Complete</option>
+          <option value="paid_out">Paid</option>
+          <option value="declined">Declined</option>
+        </select>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Job Title</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Quote</th>
+            <th>Paid</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="jobs-body">
+          <tr><td colspan="6"><div class="empty">No jobs yet.</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QUOTES -->
+    <div class="view" id="view-quotes">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Quotes & Estimates</div>
+          <div class="page-subtitle">Created from jobs — open a job and click Create Quote</div>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="quote-search" placeholder="Search quotes…" oninput="renderQuotes()"/>
+        <select class="filter-select" id="quote-filter" onchange="renderQuotes()">
+          <option value="">All Statuses</option>
+          <option value="draft">Draft</option>
+          <option value="sent">Sent</option>
+          <option value="accepted">Accepted</option>
+          <option value="declined">Declined</option>
+        </select>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Quote #</th><th>Customer</th><th>Description</th><th>Total</th><th>Status</th><th>Date</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="quotes-body">
+          <tr><td colspan="7"><div class="empty">No quotes yet. Create your first estimate.</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD QUOTE MODAL -->
+<div class="modal-bg" id="modal-add-quote">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-header">
+      <div class="modal-title" id="aq-modal-title">New Quote</div>
+      <button class="modal-close" onclick="closeModal('modal-add-quote')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Customer</label>
+          <select id="q-customer" onchange="prefillQuoteCustomer()">
+            <option value="">Select a customer…</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <select id="q-status">
+            <option value="draft">Draft</option>
+            <option value="sent">Sent</option>
+            <option value="accepted">Accepted</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>Quote Date</label><input id="q-date" type="date"/></div>
+        <div class="form-row"><label>Valid Until</label><input id="q-valid" type="date"/></div>
+      </div>
+      <div class="form-row"><label>Job Description / Title</label><input id="q-desc" type="text" placeholder=""/></div>
+
+      <div style="margin-top:1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <label style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);">Line Items</label>
+          <button class="btn btn-outline btn-sm" onclick="addLineItem()">+ Add Item</button>
+        </div>
+        <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+          <thead>
+            <tr>
+              <th style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:4px 6px;text-align:left;border-bottom:1px solid var(--border);width:38%;">Description</th>
+              <th style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:4px 6px;text-align:center;border-bottom:1px solid var(--border);width:10%;">Qty</th>
+              <th style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:4px 6px;text-align:right;border-bottom:1px solid var(--border);width:16%;">Rate $/hr</th>
+              <th style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:4px 6px;text-align:right;border-bottom:1px solid var(--border);width:16%;">Materials</th>
+              <th style="font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);padding:4px 6px;text-align:right;border-bottom:1px solid var(--border);width:16%;">Total</th>
+              <th style="width:24px;border-bottom:1px solid var(--border);"></th>
+            </tr>
+          </thead>
+          <tbody id="line-items-container"></tbody>
+        </table>
+        <div style="border-top:1px solid var(--border);margin-top:1rem;padding-top:1rem;">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div style="display:flex;gap:2rem;font-size:0.85rem;">
+              <span style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;">Subtotal</span>
+              <span id="q-subtotal" style="color:var(--text);min-width:80px;text-align:right;font-family:'DM Mono',monospace;">$0.00</span>
+            </div>
+            <div style="display:flex;gap:2rem;align-items:center;font-size:0.85rem;">
+              <span style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;">Tax %</span>
+              <input id="q-tax" type="number" value="0" min="0" max="100" step="0.1" style="width:70px;text-align:right;" oninput="calcTotals()"/>
+            </div>
+            <div style="display:flex;gap:2rem;font-size:0.85rem;">
+              <span style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;">Tax</span>
+              <span id="q-tax-amt" style="color:var(--text);min-width:80px;text-align:right;font-family:'DM Mono',monospace;">$0.00</span>
+            </div>
+            <div style="display:flex;gap:2rem;font-size:1rem;border-top:1px solid var(--gold);padding-top:6px;margin-top:4px;">
+              <span style="color:var(--gold);font-family:'Cinzel',serif;font-weight:700;letter-spacing:0.08em;">Total</span>
+              <span id="q-total" style="color:var(--gold);min-width:80px;text-align:right;font-family:'Cinzel',serif;font-weight:700;">$0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top:1rem;"><label>Notes / Terms</label><textarea id="q-notes" rows="3" placeholder=""></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="quoteSourceJobId=null;closeModal('modal-add-quote')">Cancel</button>
+      <button class="btn btn-outline" onclick="saveQuote('draft')">Save Draft</button>
+      <button class="btn btn-gold" onclick="saveQuote('current')">Save Quote</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW QUOTE MODAL (print-ready preview) -->
+<div class="modal-bg" id="modal-view-quote">
+  <div class="modal" style="max-width:720px;">
+    <div class="modal-header">
+      <div class="modal-title" id="vq-title">Quote</div>
+      <button class="modal-close" onclick="closeModal('modal-view-quote')">✕</button>
+    </div>
+    <div class="modal-body" id="vq-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentQuote()">Delete</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-view-quote')">Close</button>
+      <button class="btn btn-outline" onclick="updateQuoteStatus()">Update Status</button>
+      <button class="btn btn-gold" onclick="printQuote()">Print / Save PDF</button>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="modal-add-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="ac-modal-title">Add Customer</div>
+      <button class="modal-close" onclick="closeModal('modal-add-customer')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label>First Name</label><input id="c-fname" type="text" placeholder=""/></div>
+        <div class="form-row"><label>Last Name</label><input id="c-lname" type="text" placeholder=""/></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>Phone</label><input id="c-phone" type="tel" placeholder=""/></div>
+        <div class="form-row"><label>Email</label><input id="c-email" type="email" placeholder=""/></div>
+      </div>
+      <div class="form-row"><label>Address</label><input id="c-address" type="text" placeholder=""/></div>
+      <div class="form-grid">
+        <div class="form-row"><label>City</label><input id="c-city" type="text" placeholder=""/></div>
+        <div class="form-row"><label>State</label><input id="c-state" type="text" placeholder="" maxlength="2"/></div>
+      </div>
+      <div class="form-row" style="max-width:180px;"><label>Zip Code</label><input id="c-zip" type="text" placeholder="" maxlength="10"/></div>
+      <div class="form-row"><label>Notes</label><textarea id="c-notes" rows="3" placeholder=""></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-customer')">Cancel</button>
+      <button class="btn btn-gold" id="ac-save-btn" onclick="saveCustomer()">Save Customer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD JOB MODAL -->
+<div class="modal-bg" id="modal-add-job">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-header">
+      <div class="modal-title" id="aj-modal-title">Add Job</div>
+      <button class="modal-close" onclick="closeModal('modal-add-job')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Customer</label>
+          <select id="j-customer">
+            <option value="">Select a customer…</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <select id="j-status">
+            <option value="lead">Lead</option>
+          <option value="active">Active</option>
+            <option value="work_complete">Work Complete</option>
+            <option value="paid_out">Paid</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-row"><label>Job Title</label><input id="j-title" type="text" placeholder=""/></div>
+      </div>
+
+      <div style="margin-top:0.75rem;">
+        <label style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:8px;">Dates</label>
+        <div class="form-grid">
+          <div class="form-row"><label>Quoted</label><input id="j-date-quoted" type="date"/></div>
+          <div class="form-row"><label>Accepted / Declined</label><input id="j-date-accepted" type="date"/></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row"><label>Work Completed</label><input id="j-date-completed" type="date"/></div>
+          <div class="form-row"><label>Paid</label><input id="j-date-paid" type="date"/></div>
+        </div>
+      </div>
+
+      <!-- Job Tasks -->
+      <div style="margin-top:1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <label style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);">Tasks</label>
+          <button class="btn btn-outline btn-sm" onclick="addJobItem()">+ Add Task</button>
+        </div>
+        <div id="job-items-container"></div>
+      </div>
+
+      <div class="form-row" style="margin-top:1rem;">
+        <label>Linked Quote</label>
+        <select id="j-quote">
+          <option value="">None</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Notes</label><textarea id="j-notes" rows="3" placeholder=""></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-job')">Cancel</button>
+      <button class="btn btn-gold" id="aj-save-btn" onclick="saveJob()">Save Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW CUSTOMER MODAL -->
+<div class="modal-bg" id="modal-view-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="vc-title">Customer</div>
+      <button class="modal-close" onclick="closeModal('modal-view-customer')">✕</button>
+    </div>
+    <div class="modal-body" id="vc-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentCustomer()">Delete</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-view-customer')">Close</button>
+      <button class="btn btn-gold btn-sm" onclick="openEditCustomer()">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW JOB MODAL -->
+<div class="modal-bg" id="modal-view-job">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <div class="modal-title" id="vj-title">Job</div>
+      <button class="modal-close" onclick="closeModal('modal-view-job')">✕</button>
+    </div>
+    <div class="modal-body" id="vj-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentJob()">Delete</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-view-job')">Close</button>
+      <button class="btn btn-outline btn-sm" onclick="createQuoteFromJob()">→ Create Quote</button>
+      <button class="btn btn-outline btn-sm" id="vj-invoice-btn" onclick="generateInvoice()" style="display:none;">⬡ Invoice</button>
+      <button class="btn btn-gold btn-sm" onclick="openEditJobFull()">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT JOB STATUS MODAL -->
+<div class="modal-bg" id="modal-edit-job">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Update Job</div>
+      <button class="modal-close" onclick="closeModal('modal-edit-job')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label>Status</label>
+        <select id="ej-status">
+          <option value="lead">Lead</option>
+          <option value="active">Active</option>
+          <option value="work_complete">Work Complete</option>
+          <option value="paid_out">Paid</option>
+          <option value="declined">Declined</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Date</label><input id="ej-date" type="date"/></div>
+      <div class="form-row"><label>Notes</label><textarea id="ej-notes" rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-edit-job')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveEditJob()">Update Job</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── AUTH ──
+(function() {
+  const PASSWORD = 'curio2026';
+  const KEY = 'curio-crm-auth';
+  if (localStorage.getItem(KEY) !== PASSWORD) {
+    document.body.innerHTML = '';
+    document.body.style.cssText = 'margin:0;background:#1a1008;display:flex;align-items:center;justify-content:center;min-height:100vh;';
+    const box = document.createElement('div');
+    box.style.cssText = 'text-align:center;font-family:sans-serif;';
+    box.innerHTML = `
+      <div style="color:#FFC425;font-size:1.4rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem;">Curio CRM</div>
+      <input id="auth-input" type="password" placeholder="Password" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,196,37,0.4);color:#fff;font-size:1rem;padding:0.75rem 1.2rem;outline:none;width:220px;text-align:center;display:block;margin:0 auto 1rem;"/>
+      <button id="auth-btn" style="background:#FFC425;color:#1a1008;border:none;font-size:0.85rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:0.75rem 2rem;cursor:pointer;width:220px;">Enter</button>
+      <div id="auth-err" style="color:#e05;font-size:0.8rem;margin-top:0.75rem;display:none;">Incorrect password</div>`;
+    document.body.appendChild(box);
+    function tryLogin() {
+      const val = document.getElementById('auth-input').value;
+      if (val === PASSWORD) {
+        localStorage.setItem(KEY, PASSWORD);
+        location.reload();
+      } else {
+        document.getElementById('auth-err').style.display = 'block';
+        document.getElementById('auth-input').value = '';
+        document.getElementById('auth-input').focus();
+      }
+    }
+    document.getElementById('auth-btn').onclick = tryLogin;
+    document.getElementById('auth-input').onkeydown = e => { if (e.key === 'Enter') tryLogin(); };
+    document.getElementById('auth-input').focus();
+    throw new Error('auth required');
+  }
+})();
+
+// ── CONFIG ──
+const API = 'https://script.google.com/macros/s/AKfycbwmV5ozPpLjxSHy8HyIHdpm_NWuQcD6CJk40cBpzcIDJPVgFGkaVBLbzDPYDPmdwugu/exec';
+
+// ── DATA ──
+let customers = [];
+let jobs = [];
+let currentCustomerId = null;
+let currentJobId = null;
+let editingCustomerId = null;
+let editingJobId = null;
+let quotes = [];
+let currentQuoteId = null;
+let editingQuoteId = null;
+let quoteCounter = 1;
+let quoteSourceJobId = null;
+
+// ── GOOGLE SHEETS API ──
+async function apiCall(params) {
+  try {
+    const isWrite = params.action === 'upsert' || params.action === 'delete';
+    let res;
+    if (isWrite) {
+      const body = new URLSearchParams(params);
+      res = await fetch(API, {
+        method: 'POST',
+        body,
+        redirect: 'follow',
+      });
+    } else {
+      const url = new URL(API);
+      Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
+      res = await fetch(url, {redirect: 'follow'});
+    }
+    const text = await res.text();
+    console.log('API response:', text.substring(0,200));
+    return JSON.parse(text);
+  } catch(e) {
+    console.error('API error', e);
+    return {error: e.toString()};
+  }
+}
+
+function showSyncStatus(msg, isError) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = isError ? 'var(--red)' : 'var(--text-muted)';
+}
+
+function parseRow(r, defaults) {
+  const out = {};
+  Object.keys(defaults).forEach(k => {
+    const val = r[k];
+    out[k] = (val !== undefined && val !== '') ? val : defaults[k];
+  });
+  // Always stringify ID fields to prevent number/string comparison failures
+  if (out.id !== undefined) out.id = String(out.id);
+  if (out.customerId !== undefined) out.customerId = String(out.customerId);
+  if (out.quoteId !== undefined && out.quoteId) out.quoteId = String(out.quoteId);
+  return out;
+}
+function parseCustomer(r) {
+  return parseRow(r, {id:'',fname:'',lname:'',phone:'',email:'',address:'',city:'',state:'',zip:'',notes:'',created:''});
+}
+function parseJob(r) {
+  let items = [];
+  try { if (r.tasks) items = JSON.parse(r.tasks); } catch(e) {}
+  const j = parseRow(r, {id:'',customerId:'',title:'',status:'lead',dateQuoted:'',dateAccepted:'',dateCompleted:'',datePaid:'',quoteId:'',notes:'',paid:false,created:''});
+  j.paid = j.paid === 'true' || j.paid === true;
+  j.tasks = items;
+  j.id = String(j.id);
+  j.customerId = String(j.customerId);
+  return j;
+}
+function parseQuote(r) {
+  let items = [];
+  try {
+    const raw = r.items || r.lineItems || '';
+    if (raw && raw !== '[]') items = JSON.parse(raw);
+  } catch(e) { console.warn('parseQuote items error', e); }
+  const q = parseRow(r, {id:'',num:0,customerId:'',desc:'',status:'draft',date:'',valid:'',notes:'',taxPct:0,subtotal:0,taxAmt:0,total:0,created:''});
+  q.num = parseInt(q.num) || 0;
+  q.subtotal = parseFloat(q.subtotal) || 0;
+  q.taxAmt = parseFloat(q.taxAmt) || 0;
+  q.taxPct = parseFloat(q.taxPct) || 0;
+  q.total = parseFloat(q.total) || 0;
+  q.items = items;
+  q.id = String(q.id);
+  q.customerId = String(q.customerId);
+  return q;
+}
+
+async function syncFromSheets() {
+  showSyncStatus('Syncing…');
+  const data = await apiCall({action:'getAll'});
+  if (data.error) { showSyncStatus('Sync error', true); console.error(data.error); return; }
+  customers = (data.customers || []).filter(r => r.id && r.id !== 'id').map(parseCustomer);
+  jobs = (data.jobs || []).filter(r => r.id && r.id !== 'id').map(parseJob);
+  quotes = (data.quotes || []).filter(r => r.id && r.id !== 'id').map(parseQuote);
+  if (quotes.length) quoteCounter = Math.max(...quotes.map(q => q.num || 0)) + 1;
+  cacheLocally();
+  renderAll();
+  showSyncStatus('Synced ✓');
+}
+
+function cacheLocally() {
+  try {
+    localStorage.setItem('curio-crm-customers', JSON.stringify(customers));
+    localStorage.setItem('curio-crm-jobs', JSON.stringify(jobs));
+    localStorage.setItem('curio-crm-quotes', JSON.stringify(quotes));
+  } catch(e) {}
+}
+
+function loadCache() {
+  try {
+    const c = localStorage.getItem('curio-crm-customers');
+    const j = localStorage.getItem('curio-crm-jobs');
+    const q = localStorage.getItem('curio-crm-quotes');
+    if (c) customers = JSON.parse(c);
+    if (j) jobs = JSON.parse(j);
+    if (q) quotes = JSON.parse(q);
+    if (quotes.length) quoteCounter = Math.max(...quotes.map(q => q.num||0)) + 1;
+  } catch(e) {}
+}
+
+async function upsertCustomer(c) {
+  showSyncStatus('Saving…');
+  const r = await apiCall({action:'upsert', sheet:'Customers', data:JSON.stringify(c)});
+  showSyncStatus(r.error ? 'Save error' : 'Saved ✓', !!r.error);
+}
+async function upsertJob(j) {
+  showSyncStatus('Saving…');
+  const row = {...j, tasks:JSON.stringify(j.tasks||[]), paid:String(j.paid||false)};
+  const r = await apiCall({action:'upsert', sheet:'Jobs', data:JSON.stringify(row)});
+  showSyncStatus(r.error ? 'Save error' : 'Saved ✓', !!r.error);
+}
+async function upsertQuote(q) {
+  showSyncStatus('Saving…');
+  const row = {...q, items:JSON.stringify(q.items||[])};
+  const r = await apiCall({action:'upsert', sheet:'Quotes', data:JSON.stringify(row)});
+  showSyncStatus(r.error ? 'Save error' : 'Saved ✓', !!r.error);
+}
+async function deleteFromSheet(sheet, id) {
+  await apiCall({action:'delete', sheet, id});
+}
+
+// legacy no-op
+function save() {}
+function saveStorage() {}
+
+// ── NAVIGATION ──
+function showView(name, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.top-nav-tab').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  renderAll();
+}
+
+// ── MODALS ──
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── CUSTOMERS ──
+function openAddCustomer() {
+  editingCustomerId = null;
+  document.getElementById('ac-modal-title').textContent = 'Add Customer';
+  document.getElementById('ac-save-btn').textContent = 'Save Customer';
+  ['c-fname','c-lname','c-phone','c-email','c-city','c-address','c-state','c-zip','c-notes'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  openModal('modal-add-customer');
+}
+
+function openEditCustomer() {
+  const c = customers.find(x => x.id === currentCustomerId);
+  if (!c) return;
+  editingCustomerId = currentCustomerId;
+  document.getElementById('ac-modal-title').textContent = 'Edit Customer';
+  document.getElementById('ac-save-btn').textContent = 'Update Customer';
+  document.getElementById('c-fname').value = c.fname||'';
+  document.getElementById('c-lname').value = c.lname||'';
+  document.getElementById('c-phone').value = c.phone||'';
+  document.getElementById('c-email').value = c.email||'';
+  document.getElementById('c-address').value = c.address||'';
+  document.getElementById('c-city').value = c.city||'';
+  document.getElementById('c-state').value = c.state||'';
+  document.getElementById('c-zip').value = c.zip||'';
+  document.getElementById('c-notes').value = c.notes||'';
+  closeModal('modal-view-customer');
+  openModal('modal-add-customer');
+}
+
+function saveCustomer() {
+  const fname = document.getElementById('c-fname').value.trim();
+  const lname = document.getElementById('c-lname').value.trim();
+  if (!fname) { alert('Please enter a first name.'); return; }
+  const data = {
+    fname, lname,
+    phone: document.getElementById('c-phone').value.trim(),
+    email: document.getElementById('c-email').value.trim(),
+    address: document.getElementById('c-address').value.trim(),
+    city: document.getElementById('c-city').value.trim(),
+    state: document.getElementById('c-state').value.trim().toUpperCase(),
+    zip: document.getElementById('c-zip').value.trim(),
+    notes: document.getElementById('c-notes').value.trim(),
+  };
+  if (editingCustomerId) {
+    const c = customers.find(x => x.id === editingCustomerId);
+    if (c) { Object.assign(c, data); upsertCustomer(c); }
+    editingCustomerId = null;
+  } else {
+    const customer = {...data, id: Date.now().toString(), created: new Date().toISOString()};
+    customers.unshift(customer);
+    upsertCustomer(customer);
+  }
+  cacheLocally();
+  closeModal('modal-add-customer');
+  renderAll();
+}
+
+function viewCustomer(id) {
+  const c = customers.find(x => x.id === id);
+  if (!c) return;
+  currentCustomerId = id;
+  document.getElementById('vc-title').textContent = c.fname + ' ' + c.lname;
+  const cJobs = jobs.filter(j => j.customerId === id);
+  let html = `
+    <div class="detail-row"><div class="detail-label">Phone</div><div class="detail-value">${c.phone||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Email</div><div class="detail-value">${c.email||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Address</div><div class="detail-value">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Notes</div><div class="detail-value" style="font-style:italic;color:var(--text-muted);">${c.notes||'—'}</div></div>
+    <div class="detail-row"><div class="detail-label">Added</div><div class="detail-value" style="color:var(--text-muted);font-size:0.78rem;">${c.created ? (() => { try { return new Date(c.created).toLocaleDateString(); } catch(e) { return String(c.created); } })() : '—'}</div></div>`;
+  if (cJobs.length) {
+    html += `<hr class="customer-jobs-divider"/>
+    <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;">Jobs (${cJobs.length})</div>`;
+    cJobs.forEach(j => {
+      html += `<div class="pipeline-card" onclick="closeModal('modal-view-customer');viewJob('${j.id}')">
+        <div class="pipeline-card-name">${j.title||'—'}</div>
+        <div style="margin-top:4px;">${statusBadge(j.status)}</div>
+      </div>`;
+    });
+  }
+  document.getElementById('vc-body').innerHTML = html;
+  openModal('modal-view-customer');
+}
+
+function deleteCurrentCustomer() {
+  if (!currentCustomerId) return;
+  if (!confirm('Delete this customer and all their jobs?')) return;
+  const delJobIds = jobs.filter(j => j.customerId === currentCustomerId).map(j => j.id);
+  customers = customers.filter(c => c.id !== currentCustomerId);
+  jobs = jobs.filter(j => j.customerId !== currentCustomerId);
+  deleteFromSheet('Customers', currentCustomerId);
+  delJobIds.forEach(id => deleteFromSheet('Jobs', id));
+  cacheLocally();
+  closeModal('modal-view-customer');
+  renderAll();
+}
+
+// ── JOBS ──
+function openAddJob() {
+  editingJobId = null;
+  document.getElementById('aj-modal-title').textContent = 'Add Job';
+  document.getElementById('aj-save-btn').textContent = 'Save Job';
+  const sel = document.getElementById('j-customer');
+  sel.innerHTML = '<option value="">Select a customer…</option>';
+  customers.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id; opt.textContent = c.fname + ' ' + c.lname;
+    sel.appendChild(opt);
+  });
+  const qsel = document.getElementById('j-quote');
+  qsel.innerHTML = '<option value="">None</option>';
+  quotes.forEach(q => {
+    const c = customers.find(x => x.id === q.customerId);
+    const opt = document.createElement('option');
+    opt.value = q.id;
+    opt.textContent = `#${String(q.num).padStart(3,'0')} — ${q.desc} (${c ? c.fname+' '+c.lname : '?'})`;
+    qsel.appendChild(opt);
+  });
+  document.getElementById('j-title').value = '';
+  document.getElementById('j-notes').value = '';
+  document.getElementById('j-status').value = 'lead';
+  document.getElementById('j-date-quoted').value = '';
+  document.getElementById('j-date-accepted').value = '';
+  document.getElementById('j-date-completed').value = '';
+  document.getElementById('j-date-paid').value = '';
+  document.getElementById('j-quote').value = '';
+  document.getElementById('job-items-container').innerHTML = '';
+  addJobItem();
+  openModal('modal-add-job');
+}
+
+function openEditJobFull() {
+  const j = jobs.find(x => x.id === currentJobId);
+  if (!j) return;
+  editingJobId = currentJobId;
+  document.getElementById('aj-modal-title').textContent = 'Edit Job';
+  document.getElementById('aj-save-btn').textContent = 'Update Job';
+  const sel = document.getElementById('j-customer');
+  sel.innerHTML = '<option value="">Select a customer…</option>';
+  customers.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id; opt.textContent = c.fname + ' ' + c.lname;
+    if (c.id === j.customerId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  const qsel = document.getElementById('j-quote');
+  qsel.innerHTML = '<option value="">None</option>';
+  quotes.forEach(q => {
+    const c = customers.find(x => x.id === q.customerId);
+    const opt = document.createElement('option');
+    opt.value = q.id;
+    opt.textContent = `#${String(q.num).padStart(3,'0')} — ${q.desc}`;
+    if (q.id === j.quoteId) opt.selected = true;
+    qsel.appendChild(opt);
+  });
+  document.getElementById('j-title').value = j.title||'';
+  document.getElementById('j-status').value = j.status||'lead';
+  document.getElementById('j-date-quoted').value = j.dateQuoted||'';
+  document.getElementById('j-date-accepted').value = j.dateAccepted||'';
+  document.getElementById('j-date-completed').value = j.dateCompleted||'';
+  document.getElementById('j-date-paid').value = j.datePaid||'';
+  document.getElementById('j-notes').value = j.notes||'';
+  const container = document.getElementById('job-items-container');
+  container.innerHTML = '';
+  if (j.tasks && j.tasks.length) {
+    j.tasks.forEach(i => addJobItem(i.desc, i.details||'', i.photoUrl||'', i.hours, i.materials));
+  } else {
+    addJobItem();
+  }
+  closeModal('modal-view-job');
+  openModal('modal-add-job');
+}
+
+function saveJob() {
+  const cid = document.getElementById('j-customer').value;
+  const title = document.getElementById('j-title').value.trim();
+  if (!cid) { alert('Please select a customer.'); return; }
+  if (!title) { alert('Please enter a job title.'); return; }
+  const tasks = getJobItems();
+  const data = {
+    customerId: cid, title, tasks,
+    status: document.getElementById('j-status').value,
+    dateQuoted: document.getElementById('j-date-quoted').value,
+    dateAccepted: document.getElementById('j-date-accepted').value,
+    dateCompleted: document.getElementById('j-date-completed').value,
+    datePaid: document.getElementById('j-date-paid').value,
+    notes: document.getElementById('j-notes').value.trim(),
+    quoteId: document.getElementById('j-quote').value || null,
+  };
+  let jobToSave;
+  if (editingJobId) {
+    const j = jobs.find(x => x.id === editingJobId);
+    if (j) { Object.assign(j, data); jobToSave = j; }
+    editingJobId = null;
+  } else {
+    jobToSave = {...data, id: Date.now().toString(), paid: false, created: new Date().toISOString()};
+    jobs.unshift(jobToSave);
+  }
+  upsertJob(jobToSave);
+  cacheLocally();
+  closeModal('modal-add-job');
+  renderAll();
+}
+
+function viewJob(id) {
+  const j = jobs.find(x => x.id === id);
+  if (!j) return;
+  currentJobId = id;
+  const c = customers.find(x => x.id === j.customerId);
+  const q = j.quoteId ? quotes.find(x => x.id === j.quoteId) : null;
+  document.getElementById('vj-title').textContent = j.title||'Job';
+  let itemsHtml = '';
+  if (j.tasks && j.tasks.length) {
+    itemsHtml = `<div style="margin-top:1rem;">
+      <div style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Tasks (${j.tasks.length})</div>
+      ${j.tasks.map((i,idx) => `
+        <div style="background:var(--brown-deep);border:1px solid var(--border);padding:0.85rem 1rem;margin-bottom:8px;">
+          <div style="font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.05em;margin-bottom:4px;">${i.desc||'Task '+(idx+1)}</div>
+          ${i.details ? `<div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;margin-bottom:6px;line-height:1.6;">${i.details}</div>` : ''}
+          <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:4px;">
+            ${i.hours ? `<span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);"><span style="color:var(--text);">${i.hours}</span> hrs</span>` : ''}
+            ${i.materials ? `<span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);">Materials: <span style="color:var(--text);">$${parseFloat(i.materials).toFixed(2)}</span></span>` : ''}
+            ${i.photoUrl ? `<a href="${i.photoUrl}" target="_blank" style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gold);text-decoration:underline;">View Photos →</a>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  }
+  const quoteHtml = q
+    ? `<div class="detail-row"><div class="detail-label">Linked Quote</div><div class="detail-value"><span style="cursor:pointer;color:var(--gold);text-decoration:underline;" onclick="closeModal('modal-view-job');viewQuote('${q.id}')">#${String(q.num).padStart(3,'0')} — ${q.desc} ($${(+q.total||0).toFixed(2)}) ${quoteBadge(q.status)}</span></div></div>`
+    : `<div class="detail-row"><div class="detail-label">Linked Quote</div><div class="detail-value" style="color:var(--text-muted);font-style:italic;">None — <span style="cursor:pointer;color:var(--gold);" onclick="createQuoteFromJob()">Create one →</span></div></div>`;
+  document.getElementById('vj-body').innerHTML = `
+    <div class="detail-row"><div class="detail-label">Customer</div><div class="detail-value">${c ? c.fname+' '+c.lname : 'Unknown'}</div></div>
+    <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value">${statusBadge(j.status)}</div></div>
+    <div class="detail-row">
+      <div class="detail-label">Dates</div>
+      <div class="detail-value">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 1.5rem;">
+          <div><span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;">Quoted</span>${j.dateQuoted ? formatDate(j.dateQuoted) : '—'}</div>
+          <div><span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;">Accepted / Declined</span>${j.dateAccepted ? formatDate(j.dateAccepted) : '—'}</div>
+          <div><span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;">Work Completed</span>${j.dateCompleted ? formatDate(j.dateCompleted) : '—'}</div>
+          <div><span style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);display:block;">Paid</span>${j.datePaid ? formatDate(j.datePaid) : '—'}</div>
+        </div>
+      </div>
+    </div>
+    ${quoteHtml}
+    ${c ? `<div class="detail-row"><div class="detail-label">Phone</div><div class="detail-value">${c.phone||'—'}</div></div>` : ''}
+    ${c ? `<div class="detail-row"><div class="detail-label">Address</div><div class="detail-value">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')||'—'}</div></div>` : ''}
+    <div class="detail-row">
+      <div class="detail-label">Payment</div>
+      <div class="detail-value">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="vj-paid" ${j.paid ? 'checked' : ''} onchange="toggleJobPaid('${j.id}', this.checked)" style="width:16px;height:16px;accent-color:var(--gold);cursor:pointer;"/>
+          <span id="vj-paid-label" style="font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;color:${j.paid ? 'var(--green)' : 'var(--text-muted)'};">${j.paid ? '✓ PAID' : 'UNPAID'}</span>
+          ${j.datePaid ? `<span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text-muted);">${formatDate(j.datePaid)}</span>` : ''}
+        </label>
+      </div>
+    </div>
+    <div class="detail-row"><div class="detail-label">Notes</div><div class="detail-value" style="font-style:italic;color:var(--text-muted);">${j.notes||'—'}</div></div>
+    ${itemsHtml}`;
+  openModal('modal-view-job');
+  // Show invoice button only for completed/paid jobs
+  const invoiceBtn = document.getElementById('vj-invoice-btn');
+  if (invoiceBtn) invoiceBtn.style.display = ['work_complete','paid_out'].includes(j.status) ? 'inline-block' : 'none';
+}
+
+function deleteCurrentJob() {
+  if (!currentJobId) return;
+  if (!confirm('Delete this job?')) return;
+  deleteFromSheet('Jobs', currentJobId);
+  jobs = jobs.filter(j => j.id !== currentJobId);
+  cacheLocally();
+  closeModal('modal-view-job');
+  renderAll();
+}
+
+function toggleJobPaid(jobId, isPaid) {
+  const j = jobs.find(x => x.id === jobId);
+  if (!j) return;
+  j.paid = isPaid;
+  j.datePaid = isPaid ? new Date().toISOString().split('T')[0] : null;
+  upsertJob(j);
+  cacheLocally();
+  const label = document.getElementById('vj-paid-label');
+  if (label) { label.textContent = isPaid ? '✓ PAID' : 'UNPAID'; label.style.color = isPaid ? 'var(--green)' : 'var(--text-muted)'; }
+  renderStats(); renderJobs();
+}
+
+function quickUpdateStatus(jobId, newStatus) {
+  const j = jobs.find(x => x.id === jobId);
+  if (!j) return;
+  j.status = newStatus;
+  if (newStatus === 'work_complete' && !j.dateCompleted) j.dateCompleted = new Date().toISOString().split('T')[0];
+  if (newStatus === 'paid_out' && !j.datePaid) j.datePaid = new Date().toISOString().split('T')[0];
+  upsertJob(j);
+  cacheLocally();
+  renderStats(); renderDashboard(); renderPipeline();
+}
+
+// ── JOB ITEMS ──
+function addJobItem(desc='', details='', photoUrl='', hours='', materials='') {
+  const container = document.getElementById('job-items-container');
+  const id = 'ji-' + Date.now() + Math.random().toString(36).slice(2,5);
+  const div = document.createElement('div');
+  div.id = id;
+  div.style.cssText = 'background:var(--brown-deep);border:1px solid var(--border);padding:1rem;margin-bottom:10px;position:relative;';
+  div.innerHTML = `
+    <button onclick="document.getElementById('${id}').remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">✕</button>
+    <div style="margin-bottom:8px;"><label style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:4px;">Task Title</label>
+      <input class="ji-desc" type="text" value="${desc}" style="width:100%;background:var(--brown);border:1px solid var(--border);color:var(--text);font-family:'Libre Baskerville',serif;font-size:0.85rem;padding:0.5rem 0.7rem;outline:none;box-sizing:border-box;"/></div>
+    <div style="margin-bottom:8px;"><label style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:4px;">Description</label>
+      <textarea class="ji-details" rows="2" style="width:100%;background:var(--brown);border:1px solid var(--border);color:var(--text);font-family:'Libre Baskerville',serif;font-size:0.82rem;padding:0.5rem 0.7rem;outline:none;box-sizing:border-box;resize:vertical;">${details}</textarea></div>
+    <div style="margin-bottom:8px;"><label style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:4px;">Photo URL</label>
+      <input class="ji-photo" type="url" value="${photoUrl}" style="width:100%;background:var(--brown);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.75rem;padding:0.5rem 0.7rem;outline:none;box-sizing:border-box;"/></div>
+    <div style="display:flex;gap:10px;">
+      <div style="flex:1;"><label style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:4px;">Est. Hours</label>
+        <input class="ji-hours" type="number" min="0" step="0.25" value="${hours}" style="width:100%;background:var(--brown);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.85rem;padding:0.5rem 0.7rem;outline:none;box-sizing:border-box;"/></div>
+      <div style="flex:1;"><label style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:4px;">Materials $</label>
+        <input class="ji-materials" type="number" min="0" step="0.01" value="${materials}" style="width:100%;background:var(--brown);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.85rem;padding:0.5rem 0.7rem;outline:none;box-sizing:border-box;"/></div>
+    </div>`;
+  container.appendChild(div);
+}
+
+function getJobItems() {
+  const items = [];
+  document.querySelectorAll('#job-items-container > div[id^="ji-"]').forEach(row => {
+    const desc = row.querySelector('.ji-desc')?.value.trim()||'';
+    const details = row.querySelector('.ji-details')?.value.trim()||'';
+    const photoUrl = row.querySelector('.ji-photo')?.value.trim()||'';
+    const hours = row.querySelector('.ji-hours')?.value||'';
+    const materials = row.querySelector('.ji-materials')?.value||'';
+    if (desc||details||hours||materials) items.push({desc,details,photoUrl,hours,materials});
+  });
+  return items;
+}
+
+function createQuoteFromJob() {
+  const j = jobs.find(x => x.id === currentJobId);
+  if (!j) return;
+  quoteSourceJobId = currentJobId;
+  closeModal('modal-view-job');
+  const sel = document.getElementById('q-customer');
+  sel.innerHTML = '<option value="">Select a customer…</option>';
+  customers.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id; opt.textContent = c.fname+' '+c.lname;
+    if (c.id === j.customerId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  document.getElementById('q-desc').value = j.title||'';
+  document.getElementById('q-status').value = 'draft';
+  document.getElementById('q-notes').value = j.notes||'';
+  document.getElementById('q-tax').value = '0';
+  document.getElementById('q-date').value = new Date().toISOString().split('T')[0];
+  const valid = new Date(); valid.setDate(valid.getDate()+30);
+  document.getElementById('q-valid').value = valid.toISOString().split('T')[0];
+  document.getElementById('aq-modal-title').textContent = 'New Quote (from Job)';
+  editingQuoteId = null;
+  const container = document.getElementById('line-items-container');
+  container.innerHTML = '';
+  if (j.tasks && j.tasks.length) {
+    j.tasks.forEach(i => addLineItem(i.desc, i.hours||1, '100', i.materials||'', i.details||''));
+  } else {
+    addLineItem();
+  }
+  calcTotals();
+  openModal('modal-add-quote');
+}
+
+// ── QUOTES ──
+function openAddQuote() {
+  editingQuoteId = null;
+  document.getElementById('aq-modal-title').textContent = 'New Quote';
+  const sel = document.getElementById('q-customer');
+  sel.innerHTML = '<option value="">Select a customer…</option>';
+  customers.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id; opt.textContent = c.fname+' '+c.lname;
+    sel.appendChild(opt);
+  });
+  document.getElementById('q-desc').value = '';
+  document.getElementById('q-notes').value = '';
+  document.getElementById('q-status').value = 'draft';
+  document.getElementById('q-tax').value = '0';
+  document.getElementById('q-date').value = new Date().toISOString().split('T')[0];
+  const valid = new Date(); valid.setDate(valid.getDate()+30);
+  document.getElementById('q-valid').value = valid.toISOString().split('T')[0];
+  document.getElementById('line-items-container').innerHTML = '';
+  addLineItem();
+  calcTotals();
+  openModal('modal-add-quote');
+}
+
+function addLineItem(desc='', qty=1, rate='100', materials='', details='') {
+  const container = document.getElementById('line-items-container');
+  const id = 'li-' + Date.now() + Math.random().toString(36).slice(2,5);
+  const tr = document.createElement('tr');
+  tr.id = id;
+  const s = "width:100%;background:var(--brown-deep);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.8rem;padding:5px 6px;outline:none;box-sizing:border-box;";
+  tr.innerHTML = `
+    <td style="padding:4px 4px 4px 0;">
+      <input type="text" class="li-desc" value="${desc}" style="${s}" oninput="calcTotals()"/>
+      <input type="hidden" class="li-details" value="${details.replace(/"/g,'&quot;')}"/>
+    </td>
+    <td style="padding:4px 3px;"><input type="number" class="li-qty" min="0" step="0.25" value="${qty}" style="${s}text-align:center;" oninput="calcTotals()"/></td>
+    <td style="padding:4px 3px;"><input type="number" class="li-rate" min="0" step="0.01" value="${rate}" style="${s}text-align:right;" oninput="calcTotals()"/></td>
+    <td style="padding:4px 3px;"><input type="number" class="li-materials" min="0" step="0.01" placeholder="0.00" value="${materials}" style="${s}text-align:right;" oninput="calcTotals()"/></td>
+    <td style="padding:4px 3px;"><input type="text" class="li-total" readonly value="" style="${s}text-align:right;color:var(--text-muted);background:var(--brown);cursor:default;"/></td>
+    <td style="padding:4px 0 4px 4px;text-align:center;"><button onclick="document.getElementById('${id}').remove();calcTotals()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:0;">✕</button></td>`;
+  container.appendChild(tr);
+  calcTotals();
+}
+
+function calcTotals() {
+  let subtotal = 0;
+  document.querySelectorAll('#line-items-container tr').forEach(row => {
+    const qty = parseFloat(row.querySelector('.li-qty')?.value)||0;
+    const rate = parseFloat(row.querySelector('.li-rate')?.value)||0;
+    const mats = parseFloat(row.querySelector('.li-materials')?.value)||0;
+    const total = (qty*rate)+mats;
+    const el = row.querySelector('.li-total');
+    if (el) el.value = total > 0 ? '$'+total.toFixed(2) : '';
+    subtotal += total;
+  });
+  const taxPct = parseFloat(document.getElementById('q-tax')?.value)||0;
+  const taxAmt = subtotal*(taxPct/100);
+  const grand = subtotal+taxAmt;
+  document.getElementById('q-subtotal').textContent = '$'+subtotal.toFixed(2);
+  document.getElementById('q-tax-amt').textContent = '$'+taxAmt.toFixed(2);
+  document.getElementById('q-total').textContent = '$'+grand.toFixed(2);
+}
+
+function getLineItems() {
+  const items = [];
+  document.querySelectorAll('#line-items-container tr').forEach(row => {
+    const desc = row.querySelector('.li-desc')?.value.trim()||'';
+    const details = row.querySelector('.li-details')?.value||'';
+    const qty = parseFloat(row.querySelector('.li-qty')?.value)||0;
+    const rate = parseFloat(row.querySelector('.li-rate')?.value)||0;
+    const materials = parseFloat(row.querySelector('.li-materials')?.value)||0;
+    const total = (qty*rate)+materials;
+    if (desc||rate||materials) items.push({desc,details,qty,rate,materials,total});
+  });
+  return items;
+}
+
+function prefillQuoteCustomer() {}
+
+function saveQuote(statusOverride) {
+  const cid = document.getElementById('q-customer').value;
+  const desc = document.getElementById('q-desc').value.trim();
+  if (!cid) { alert('Please select a customer.'); return; }
+  if (!desc) { alert('Please enter a description.'); return; }
+  const items = getLineItems();
+  const taxPct = parseFloat(document.getElementById('q-tax').value)||0;
+  const subtotal = items.reduce((s,i) => s+i.total, 0);
+  const taxAmt = subtotal*(taxPct/100);
+  const total = subtotal+taxAmt;
+  const status = statusOverride === 'draft' ? 'draft' : document.getElementById('q-status').value;
+  let quoteToSave;
+  if (editingQuoteId) {
+    const q = quotes.find(x => x.id === editingQuoteId);
+    if (q) { Object.assign(q, {customerId:cid,desc,items,taxPct,subtotal,taxAmt,total,status,date:document.getElementById('q-date').value,valid:document.getElementById('q-valid').value,notes:document.getElementById('q-notes').value.trim()}); quoteToSave = q; }
+  } else {
+    quoteToSave = {id:Date.now().toString(), num:quoteCounter++, customerId:cid, desc, items, taxPct, subtotal, taxAmt, total, status,
+      date:document.getElementById('q-date').value, valid:document.getElementById('q-valid').value,
+      notes:document.getElementById('q-notes').value.trim(), created:new Date().toISOString()};
+    quotes.unshift(quoteToSave);
+    if (quoteSourceJobId) {
+      const sourceJob = jobs.find(x => x.id === quoteSourceJobId);
+      if (sourceJob) { sourceJob.quoteId = quoteToSave.id; upsertJob(sourceJob); }
+      quoteSourceJobId = null;
+    }
+  }
+  upsertQuote(quoteToSave);
+  cacheLocally();
+  closeModal('modal-add-quote');
+  renderAll();
+}
+
+function quoteBadge(s) {
+  const map = {draft:['Draft','quote-status-draft'],sent:['Sent','quote-status-sent'],accepted:['Accepted','quote-status-accepted'],declined:['Declined','quote-status-declined']};
+  const [label,cls] = map[s]||['Draft','quote-status-draft'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function viewQuote(id) {
+  const q = quotes.find(x => x.id === id);
+  if (!q) return;
+  currentQuoteId = id;
+  const c = customers.find(x => x.id === q.customerId);
+  document.getElementById('vq-title').textContent = `Quote #${String(q.num).padStart(3,'0')}`;
+  document.getElementById('vq-body').innerHTML = `
+    <div class="quote-preview" id="quote-print-area">
+      <div class="quote-preview-header">
+        <div>
+          <div class="quote-preview-brand">Curio Handyman Co.</div>
+          <div class="quote-preview-brand-sub">hello@curiohandyman.com</div>
+          <div class="quote-preview-brand-sub">(360) 555-0000</div>
+        </div>
+        <div class="quote-preview-meta">
+          <strong>ESTIMATE</strong>
+          <div># ${String(q.num).padStart(3,'0')}</div>
+          <div>Date: ${formatDate(q.date)}</div>
+          <div>Valid: ${formatDate(q.valid)}</div>
+        </div>
+      </div>
+      <div class="quote-to">
+        <div class="quote-to-label">Prepared For</div>
+        <div class="quote-to-name">${c ? c.fname+' '+c.lname : '—'}</div>
+        <div class="quote-to-detail">${c?.phone||''} ${c?.email ? '· '+c.email : ''}</div>
+        <div class="quote-to-detail">${[c?.address,c?.city,c?.state,c?.zip].filter(Boolean).join(', ')}</div>
+      </div>
+      <div style="font-size:0.95rem;font-weight:700;color:#2a1a10;margin-bottom:1rem;font-family:'Cinzel',serif;letter-spacing:0.05em;">${q.desc}</div>
+      <table class="quote-items-table">
+        <thead><tr><th>Tasks</th></tr></thead>
+        <tbody>${q.items.map(i => `<tr><td>
+          <div style="font-weight:700;color:#2a1a10;">${i.desc}</div>
+          ${i.details ? `<div style="font-size:0.78rem;color:#7a5a3a;font-style:italic;margin-top:3px;line-height:1.5;">${i.details}</div>` : ''}
+        </td></tr>`).join('')}</tbody>
+      </table>
+      <div class="quote-totals">
+        <div class="quote-total-row"><span>Subtotal</span><span>$${(+q.subtotal||0).toFixed(2)}</span></div>
+        <div class="quote-total-row"><span>Tax (${q.taxPct}%)</span><span>$${(+q.taxAmt||0).toFixed(2)}</span></div>
+        <div class="quote-total-row grand"><span>Total</span><span>$${(+q.total||0).toFixed(2)}</span></div>
+      </div>
+      ${q.notes ? `<div class="quote-footer"><strong style="font-style:normal;">Notes & Terms:</strong> ${q.notes}</div>` : ''}
+      <div class="quote-sig">
+        <div class="quote-sig-block">Accepted By</div>
+        <div class="quote-sig-block">Date</div>
+        <div class="quote-sig-block">Signature</div>
+      </div>
+    </div>`;
+  openModal('modal-view-quote');
+}
+
+function deleteCurrentQuote() {
+  if (!currentQuoteId || !confirm('Delete this quote?')) return;
+  deleteFromSheet('Quotes', currentQuoteId);
+  quotes = quotes.filter(q => q.id !== currentQuoteId);
+  cacheLocally();
+  closeModal('modal-view-quote');
+  renderAll();
+}
+
+function updateQuoteStatus() {
+  const q = quotes.find(x => x.id === currentQuoteId);
+  if (!q) return;
+  const statuses = ['draft','sent','accepted','declined'];
+  const next = statuses[(statuses.indexOf(q.status)+1) % statuses.length];
+  if (!confirm(`Change status to "${next}"?`)) return;
+  q.status = next;
+  upsertQuote(q);
+  cacheLocally();
+  closeModal('modal-view-quote');
+  renderAll();
+}
+
+function renderQuotes() {
+  const q_str = document.getElementById('quote-search')?.value.toLowerCase()||'';
+  const f = document.getElementById('quote-filter')?.value||'';
+  let list = quotes;
+  if (f) list = list.filter(q => q.status === f);
+  if (q_str) list = list.filter(q => {
+    const c = customers.find(x => x.id === q.customerId);
+    return q.desc.toLowerCase().includes(q_str)||(c&&(c.fname+' '+c.lname).toLowerCase().includes(q_str));
+  });
+  const tbody = document.getElementById('quotes-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty">No quotes found.</div></td></tr>'; return; }
+  tbody.innerHTML = list.map(q => {
+    const c = customers.find(x => x.id === q.customerId);
+    return `<tr onclick="viewQuote('${q.id}')" style="cursor:pointer;">
+      <td>#${String(q.num).padStart(3,'0')}</td>
+      <td>${c ? c.fname+' '+c.lname : '—'}</td>
+      <td style="color:var(--text);">${q.desc}</td>
+      <td style="font-family:'DM Mono',monospace;color:var(--gold);">$${(+q.total||0).toFixed(2)}</td>
+      <td>${quoteBadge(q.status)}</td>
+      <td style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.72rem;">${formatDate(q.date)}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();viewQuote('${q.id}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function printQuote() {
+  const q = quotes.find(x => x.id === currentQuoteId);
+  const c = q ? customers.find(x => x.id === q.customerId) : null;
+  if (!q) return;
+  const itemsHtml = q.items.map(i => `<tr><td>
+    <div style="font-weight:bold;color:#2a1a10;font-size:14px;">${i.desc}</div>
+    ${i.details ? `<div style="font-size:12px;color:#7a5a3a;font-style:italic;margin-top:4px;line-height:1.6;">${i.details}</div>` : ''}
+  </td></tr>`).join('');
+  const docHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<link rel="icon" type="image/png" href="images/raccoon.png"/><title>Quote #${String(q.num).padStart(3,'0')}</title>
+  <style>@page{margin:0.75in}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;font-size:13px;color:#2a1a10}.wrap{max-width:680px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #FFC425;margin-bottom:20px}.brand-name{font-weight:bold;font-size:17px;letter-spacing:.08em;text-transform:uppercase}.brand-sub{font-size:11px;color:#7a5a3a;margin-top:4px}.meta{text-align:right;font-size:11px;color:#5a3a1a;line-height:1.7}.meta-badge{display:inline-block;background:#2a1a10;color:#FFC425;padding:2px 10px;font-size:10px;letter-spacing:.15em;margin-bottom:6px}.to-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9a7a5a;margin-bottom:4px}.to-name{font-weight:bold;font-size:14px;margin-bottom:2px}.to-detail{font-size:12px;color:#5a3a1a;line-height:1.6}.job-title{font-weight:bold;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:18px 0 12px;border-bottom:1px solid #d4b87a;padding-bottom:6px}table{width:100%;border-collapse:collapse}th{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9a7a5a;padding:6px 8px;text-align:left;background:#f5edd8;border-bottom:1px solid #d4b87a}td{padding:12px 8px;vertical-align:top;border-bottom:1px solid #ecdcc0;word-break:break-word}.totals{max-width:220px;margin-left:auto;margin-top:16px}.tr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e8dcc0;font-size:13px}.tr.grand{font-weight:bold;font-size:15px;border-top:2px solid #FFC425;border-bottom:none;padding-top:8px;margin-top:4px}.notes{margin-top:20px;padding-top:12px;border-top:1px solid #d4b87a;font-size:12px;color:#7a5a3a;font-style:italic}.sig{display:flex;gap:30px;margin-top:30px}.sig-block{flex:1;border-top:1px solid #9a7a5a;padding-top:4px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a7a5a}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
+  </head><body><div class="wrap">
+  <div class="header"><div><div class="brand-name">Curio Handyman Co.</div><div class="brand-sub">hello@curiohandyman.com</div><div class="brand-sub">(360) 555-0000</div></div>
+  <div class="meta"><div class="meta-badge">ESTIMATE</div><div># ${String(q.num).padStart(3,'0')}</div><div>Date: ${formatDate(q.date)}</div><div>Valid until: ${formatDate(q.valid)}</div></div></div>
+  <div style="margin-bottom:16px;"><div class="to-label">Prepared For</div><div class="to-name">${c ? c.fname+' '+c.lname : ''}</div>${c&&c.phone?`<div class="to-detail">${c.phone}</div>`:''} ${c&&c.email?`<div class="to-detail">${c.email}</div>`:''} ${c&&(c.address||c.city)?`<div class="to-detail">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')}</div>`:''}</div>
+  <div class="job-title">${q.desc}</div>
+  <table><thead><tr><th>Tasks</th></tr></thead><tbody>${itemsHtml}</tbody></table>
+  <div class="totals"><div class="tr"><span>Subtotal</span><span>$${(+q.subtotal||0).toFixed(2)}</span></div><div class="tr"><span>Tax (${q.taxPct}%)</span><span>$${(+q.taxAmt||0).toFixed(2)}</span></div><div class="tr grand"><span>Total</span><span>$${(+q.total||0).toFixed(2)}</span></div></div>
+  ${q.notes?`<div class="notes"><strong style="font-style:normal;">Notes &amp; Terms:</strong> ${q.notes}</div>`:''}
+  <div class="sig"><div class="sig-block">Accepted By</div><div class="sig-block">Date</div><div class="sig-block">Signature</div></div>
+  </div><script>window.onload=function(){window.print();}<\/script></body></html>`;
+  const blob = new Blob([docHtml], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
+  if (!win) { alert('Please allow popups then try again.'); return; }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+// ── INVOICE ──
+let invoiceCounter = 1;
+
+function generateInvoice() {
+  const j = jobs.find(x => x.id === currentJobId);
+  if (!j) return;
+  const c = customers.find(x => x.id === j.customerId);
+  const q = j.quoteId ? quotes.find(x => x.id === j.quoteId) : null;
+
+  const invoiceNum = String(invoiceCounter++).padStart(3, '0');
+  const today = new Date().toISOString().split('T')[0];
+  const due = new Date(); due.setDate(due.getDate() + 14);
+  const dueDate = due.toISOString().split('T')[0];
+
+  // Build line items from quote or job tasks
+  let lineItems = '';
+  let subtotal = 0;
+  let taxPct = 0;
+  let taxAmt = 0;
+  let total = 0;
+
+  if (q && q.items && q.items.length) {
+    taxPct = q.taxPct || 0;
+    subtotal = q.subtotal || 0;
+    taxAmt = q.taxAmt || 0;
+    total = q.total || 0;
+    lineItems = q.items.map(i => `<tr>
+      <td>${i.desc}${i.details ? `<div style="font-size:11px;color:#7a5a3a;font-style:italic;margin-top:2px;">${i.details}</div>` : ''}</td>
+    </tr>`).join('');
+  } else if (j.tasks && j.tasks.length) {
+    j.tasks.forEach(t => {
+      const hrs = parseFloat(t.hours) || 0;
+      subtotal += hrs * 100;
+      lineItems += `<tr>
+        <td>${t.desc}${t.details ? `<div style="font-size:11px;color:#7a5a3a;font-style:italic;margin-top:2px;">${t.details}</div>` : ''}</td>
+      </tr>`;
+    });
+    total = subtotal;
+  }
+
+  const docHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<link rel="icon" type="image/png" href="images/raccoon.png"/>
+<title>Invoice #${invoiceNum}</title>
+<style>
+  @page { margin: 0.75in; size: letter; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, serif; font-size: 13px; color: #2a1a10; }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 14px; border-bottom: 3px solid #FFC425; margin-bottom: 20px; }
+  .brand-name { font-weight: bold; font-size: 17px; letter-spacing: .08em; text-transform: uppercase; }
+  .brand-sub { font-size: 11px; color: #7a5a3a; margin-top: 4px; }
+  .meta { text-align: right; font-size: 11px; color: #5a3a1a; line-height: 1.8; }
+  .meta-badge { display: inline-block; background: #2a1a10; color: #FFC425; padding: 2px 12px; font-size: 11px; letter-spacing: .15em; margin-bottom: 6px; }
+  .to-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #9a7a5a; margin-bottom: 4px; }
+  .to-name { font-weight: bold; font-size: 15px; margin-bottom: 2px; }
+  .to-detail { font-size: 12px; color: #5a3a1a; line-height: 1.6; }
+  .job-title { font-weight: bold; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; margin: 18px 0 12px; border-bottom: 1px solid #d4b87a; padding-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: #9a7a5a; padding: 6px 8px; text-align: left; background: #f5edd8; border-bottom: 1px solid #d4b87a; }
+  th:last-child { text-align: right; }
+  td { padding: 10px 8px; vertical-align: top; border-bottom: 1px solid #ecdcc0; word-break: break-word; }
+  td:last-child { text-align: right; white-space: nowrap; font-family: monospace; }
+  .totals { max-width: 240px; margin-left: auto; margin-top: 16px; }
+  .tr { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #e8dcc0; font-size: 13px; }
+  .tr.grand { font-weight: bold; font-size: 16px; border-top: 2px solid #FFC425; border-bottom: none; padding-top: 8px; margin-top: 4px; color: #2a1a10; }
+  .due-box { background: #f5edd8; border: 1px solid #d4b87a; padding: 12px 16px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .due-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #9a7a5a; }
+  .due-amount { font-size: 20px; font-weight: bold; color: #2a1a10; }
+  .due-date { font-size: 12px; color: #7a5a3a; margin-top: 2px; }
+  .payment { margin-top: 20px; padding-top: 14px; border-top: 1px solid #d4b87a; font-size: 12px; color: #7a5a3a; }
+  .payment strong { color: #2a1a10; font-style: normal; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head><body><div class="wrap">
+  <div class="header">
+    <div>
+      <div class="brand-name">Curio Handyman Co.</div>
+      <div class="brand-sub">hello@curiohandyman.com</div>
+      <div class="brand-sub">(360) 555-0000</div>
+    </div>
+    <div class="meta">
+      <div class="meta-badge">INVOICE</div>
+      <div># ${invoiceNum}</div>
+      <div>Date: ${formatDate(today)}</div>
+      <div>Due: ${formatDate(dueDate)}</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <div class="to-label">Bill To</div>
+    <div class="to-name">${c ? c.fname+' '+c.lname : ''}</div>
+    ${c && c.phone ? `<div class="to-detail">${c.phone}</div>` : ''}
+    ${c && c.email ? `<div class="to-detail">${c.email}</div>` : ''}
+    ${c && (c.address||c.city) ? `<div class="to-detail">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')}</div>` : ''}
+  </div>
+
+  <div class="job-title">${j.title||'Services Rendered'}</div>
+
+  <table>
+    <thead><tr><th>Description</th></tr></thead>
+    <tbody>${lineItems}</tbody>
+  </table>
+
+  <div class="totals">
+    <div class="tr"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+    ${taxPct > 0 ? `<div class="tr"><span>Tax (${taxPct}%)</span><span>$${taxAmt.toFixed(2)}</span></div>` : ''}
+    <div class="tr grand"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+  </div>
+
+  <div class="due-box">
+    <div>
+      <div class="due-label">Amount Due</div>
+      <div class="due-amount">$${total.toFixed(2)}</div>
+      <div class="due-date">Due by ${formatDate(dueDate)}</div>
+    </div>
+  </div>
+
+  <div class="payment">
+    <strong>Payment methods accepted:</strong> Venmo · Zelle · Cash · Check made out to Curio Handyman Co.
+  </div>
+
+</div><script>window.onload=function(){window.print();}<\/script></body></html>`;
+
+  const blob = new Blob([docHtml], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
+  if (!win) { alert('Please allow popups then try again.'); return; }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+// ── HELPERS ──
+function statusBadge(s) {
+  const map = {lead:['Lead','badge-lead'],active:['Active','badge-progress'],work_complete:['Work Complete','badge-complete'],paid_out:['Paid','badge-invoiced'],declined:['Declined','badge-declined']};
+  const [label,cls] = map[s]||['Unknown','badge-lead'];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+function formatDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d+'T12:00:00');
+  return dt.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+}
+
+// ── RENDER ──
+function renderAll() { renderStats(); renderDashboard(); renderCustomers(); renderJobs(); renderPipeline(); renderQuotes(); }
+
+function renderStats() {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('stat-customers', customers.length);
+  set('stat-jobs', jobs.length);
+  set('stat-active', jobs.filter(j => j.status === 'lead').length);
+  set('stat-complete', jobs.filter(j => ['active','work_complete','paid_out'].includes(j.status)).length);
+}
+
+function renderDashboard() {
+  const map = {lead:'d-leads', active:'d-active', work_complete:'d-work-complete', paid_out:'d-paid-out', declined:'d-declined'};
+  Object.entries(map).forEach(([status, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = jobs.filter(j => j.status === status).length;
+  });
+}
+
+function renderPipeline() {
+  ['lead','active','work_complete','paid_out','declined'].forEach(s => {
+    const col = document.getElementById('pipe-'+s);
+    const count = document.getElementById('pc-'+s);
+    const list = jobs.filter(j => j.status === s);
+    if (count) count.textContent = list.length;
+    if (!col) return;
+    col.innerHTML = list.map(j => {
+      const c = customers.find(x => x.id === j.customerId);
+      const q = j.quoteId ? quotes.find(x => x.id === j.quoteId) : null;
+      const totalHrs = (j.tasks || []).reduce((sum, t) => sum + (parseFloat(t.hours) || 0), 0);
+      const hrsStr = totalHrs > 0 ? `${totalHrs % 1 === 0 ? totalHrs : totalHrs.toFixed(1)} hrs` : null;
+      const laborTotal = q ? q.items.reduce((sum, i) => sum + ((i.qty||0) * (i.rate||0)), 0) : 0;
+      const quoteStr = q && laborTotal > 0 ? `$${laborTotal.toFixed(2)}` : null;
+      return `<div class="pipeline-card" onclick="viewJob('${j.id}')">
+        <div class="pipeline-card-name">${c ? c.fname+' '+c.lname : '—'}</div>
+        <div class="pipeline-card-job">${j.title||'—'}</div>
+        ${hrsStr || quoteStr ? `<div style="display:flex;gap:8px;margin-top:5px;flex-wrap:wrap;">
+          ${hrsStr ? `<span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--text-muted);">⏱ ${hrsStr}</span>` : ''}
+          ${quoteStr ? `<span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gold);">${quoteStr}</span>` : ''}
+        </div>` : ''}
+        <div class="pipeline-card-date">${formatDate(j.datePaid||j.dateCompleted||j.dateAccepted||j.dateQuoted||'')}</div>
+      </div>`;
+    }).join('');
+  });
+}
+
+function renderCustomers() {
+  const q = (document.getElementById('customer-search')?.value||'').toLowerCase();
+  let list = customers;
+  if (q) list = list.filter(c => (c.fname+' '+c.lname).toLowerCase().includes(q)||c.phone?.toLowerCase().includes(q)||c.city?.toLowerCase().includes(q)||c.email?.toLowerCase().includes(q));
+  const tbody = document.getElementById('customers-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty">No customers found.</div></td></tr>'; return; }
+  tbody.innerHTML = list.map(c => {
+    const cJobs = jobs.filter(j => j.customerId === c.id).length;
+    return `<tr onclick="viewCustomer('${c.id}')" style="cursor:pointer;">
+      <td>${c.fname} ${c.lname}</td>
+      <td style="color:var(--text);font-family:'DM Mono',monospace;font-size:0.75rem;">${c.phone||'—'}</td>
+      <td style="color:var(--text-muted);font-size:0.78rem;">${c.email||'—'}</td>
+      <td style="color:var(--text-muted);">${c.city||'—'}</td>
+      <td style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.75rem;">${cJobs}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();viewCustomer('${c.id}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderJobs() {
+  const q = (document.getElementById('job-search')?.value||'').toLowerCase();
+  const f = document.getElementById('job-filter')?.value||'';
+  let list = jobs;
+  if (f) list = list.filter(j => j.status === f);
+  if (q) list = list.filter(j => {
+    const c = customers.find(x => x.id === j.customerId);
+    return (j.title||'').toLowerCase().includes(q)||(c&&(c.fname+' '+c.lname).toLowerCase().includes(q));
+  });
+  const tbody = document.getElementById('jobs-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty">No jobs found.</div></td></tr>'; return; }
+  tbody.innerHTML = list.map(j => {
+    const c = customers.find(x => x.id === j.customerId);
+    const lq = j.quoteId ? quotes.find(x => x.id === j.quoteId) : null;
+    const title = j.title||'—';
+    const itemCount = j.tasks ? j.tasks.length : 0;
+    const statusOptions = ['lead','active','work_complete','paid_out','declined']
+      .map(s => `<option value="${s}" ${j.status===s?'selected':''}>${s==='work_complete'?'Work Complete':s==='paid_out'?'Paid':s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('');
+    return `<tr onclick="viewJob('${j.id}')" style="cursor:pointer;">
+      <td>${c ? c.fname+' '+c.lname : '—'}</td>
+      <td style="color:var(--text);">${title}${itemCount?`<span style="margin-left:8px;font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--text-muted);">(${itemCount} task${itemCount>1?'s':''})</span>`:''}  </td>
+      <td onclick="event.stopPropagation()"><select class="quick-status" onchange="quickUpdateStatus('${j.id}', this.value)">${statusOptions}</select></td>
+      <td style="color:var(--text-muted);font-family:'DM Mono',monospace;font-size:0.72rem;">${formatDate(j.datePaid||j.dateCompleted||j.dateAccepted||j.dateQuoted||'')}</td>
+      <td>${lq?`<span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--gold);">#${String(lq.num).padStart(3,'0')}</span>`:'<span style="color:var(--text-muted);">—</span>'}</td>
+      <td onclick="event.stopPropagation()">${['work_complete','paid_out'].includes(j.status)?`<label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" ${j.paid?'checked':''} onchange="toggleJobPaid('${j.id}', this.checked)" style="width:14px;height:14px;accent-color:var(--gold);"/><span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:${j.paid?'var(--green)':'var(--red)'};">${j.paid?'Paid':'Unpaid'}</span></label>`:'<span style="color:var(--text-muted);">—</span>'}</td>
+      <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();viewJob('${j.id}')">View</button></td>
+    </tr>`;
+  }).join('');
+}
+
+
+
+// ── INIT ──
+function fixNavOffset() {
+  const tb = document.querySelector('.topbar');
+  const nav = document.querySelector('.top-nav');
+  if (tb && nav) nav.style.top = tb.offsetHeight + 'px';
+}
+(async () => {
+  loadCache();
+  renderAll();
+  fixNavOffset();
+  await syncFromSheets();
+})();
+
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('open'); });
+});
+
+</script>
+</body>
+</html>
