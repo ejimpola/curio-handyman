@@ -1010,20 +1010,22 @@ async function apiCall(params) {
     const isWrite = params.action === 'upsert' || params.action === 'delete';
     let res;
     if (isWrite) {
-      const body = new URLSearchParams(params);
-      res = await fetch(API, {
-        method: 'POST',
-        body,
-        redirect: 'follow',
-      });
+      // Send as JSON to avoid + encoding issues with spaces
+      const url = new URL(API);
+      url.searchParams.set('action', params.action);
+      if (params.sheet) url.searchParams.set('sheet', params.sheet);
+      if (params.id) url.searchParams.set('id', params.id);
+      if (params.data) url.searchParams.set('data', params.data);
+      res = await fetch(url, { method: 'GET', mode: 'no-cors', redirect: 'follow' });
+      return { ok: true };
     } else {
       const url = new URL(API);
-      Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
-      res = await fetch(url, {redirect: 'follow'});
+      Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, typeof v === 'string' ? v : JSON.stringify(v)));
+      res = await fetch(url, { redirect: 'follow' });
+      const text = await res.text();
+      console.log('API response:', text.substring(0,200));
+      return JSON.parse(text);
     }
-    const text = await res.text();
-    console.log('API response:', text.substring(0,200));
-    return JSON.parse(text);
   } catch(e) {
     console.error('API error', e);
     return {error: e.toString()};
@@ -1369,7 +1371,7 @@ function viewJob(id) {
       ${j.tasks.map((i,idx) => `
         <div style="background:var(--brown-deep);border:1px solid var(--border);padding:0.85rem 1rem;margin-bottom:8px;">
           <div style="font-family:'Cinzel',serif;font-size:0.85rem;font-weight:700;color:var(--gold);letter-spacing:0.05em;margin-bottom:4px;">${i.desc||'Task '+(idx+1)}</div>
-          ${i.details ? `<div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;margin-bottom:6px;line-height:1.6;">${i.details}</div>` : ''}
+          ${i.details ? `<div style="font-size:0.82rem;color:var(--text-muted);font-style:italic;margin-bottom:6px;line-height:1.6;">${i.details.replace(/\n/g, '<br/>')}</div>` : ''}
           <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:4px;">
             ${i.hours ? `<span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);"><span style="color:var(--text);">${i.hours}</span> hrs</span>` : ''}
             ${i.materials ? `<span style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--text-muted);">Materials: <span style="color:var(--text);">$${parseFloat(i.materials).toFixed(2)}</span></span>` : ''}
@@ -1647,8 +1649,8 @@ function viewQuote(id) {
       <div class="quote-preview-header">
         <div>
           <div class="quote-preview-brand">Curio Handyman Co.</div>
-          <div class="quote-preview-brand-sub">hello@curiohandyman.com</div>
-          <div class="quote-preview-brand-sub">(360) 555-0000</div>
+          <div class="quote-preview-brand-sub">ericimpola@gmail.com</div>
+          <div class="quote-preview-brand-sub">(425) 319-5855</div>
         </div>
         <div class="quote-preview-meta">
           <strong>ESTIMATE</strong>
@@ -1660,7 +1662,8 @@ function viewQuote(id) {
       <div class="quote-to">
         <div class="quote-to-label">Prepared For</div>
         <div class="quote-to-name">${c ? c.fname+' '+c.lname : '—'}</div>
-        <div class="quote-to-detail">${c?.phone||''} ${c?.email ? '· '+c.email : ''}</div>
+        <div class="quote-to-detail">${c?.phone||''}</div>
+        ${c?.email ? `<div class="quote-to-detail">${c.email}</div>` : ''}
         <div class="quote-to-detail">${[c?.address,c?.city,c?.state,c?.zip].filter(Boolean).join(', ')}</div>
       </div>
       <div style="font-size:0.95rem;font-weight:700;color:#2a1a10;margin-bottom:1rem;font-family:'Cinzel',serif;letter-spacing:0.05em;">${q.desc}</div>
@@ -1668,7 +1671,7 @@ function viewQuote(id) {
         <thead><tr><th>Tasks</th></tr></thead>
         <tbody>${q.items.map(i => `<tr><td>
           <div style="font-weight:700;color:#2a1a10;">${i.desc}</div>
-          ${i.details ? `<div style="font-size:0.78rem;color:#7a5a3a;font-style:italic;margin-top:3px;line-height:1.5;">${i.details}</div>` : ''}
+          ${i.details ? `<div style="font-size:0.78rem;color:#7a5a3a;font-style:italic;margin-top:3px;line-height:1.5;">${i.details.replace(/\n/g, '<br/>')}</div>` : ''}
         </td></tr>`).join('')}</tbody>
       </table>
       <div class="quote-totals">
@@ -1740,15 +1743,15 @@ function printQuote() {
   if (!q) return;
   const itemsHtml = q.items.map(i => `<tr><td>
     <div style="font-weight:bold;color:#2a1a10;font-size:14px;">${i.desc}</div>
-    ${i.details ? `<div style="font-size:12px;color:#7a5a3a;font-style:italic;margin-top:4px;line-height:1.6;">${i.details}</div>` : ''}
+    ${i.details ? `<div style="font-size:12px;color:#7a5a3a;font-style:italic;margin-top:4px;line-height:1.6;">${i.details.replace(/\n/g, '<br/>')}</div>` : ''}
   </td></tr>`).join('');
   const docHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
 <link rel="icon" type="image/png" href="images/raccoon.png"/><title>Quote #${String(q.num).padStart(3,'0')}</title>
   <style>@page{margin:0.75in}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Georgia,serif;font-size:13px;color:#2a1a10}.wrap{max-width:680px;margin:0 auto}.header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #FFC425;margin-bottom:20px}.brand-name{font-weight:bold;font-size:17px;letter-spacing:.08em;text-transform:uppercase}.brand-sub{font-size:11px;color:#7a5a3a;margin-top:4px}.meta{text-align:right;font-size:11px;color:#5a3a1a;line-height:1.7}.meta-badge{display:inline-block;background:#2a1a10;color:#FFC425;padding:2px 10px;font-size:10px;letter-spacing:.15em;margin-bottom:6px}.to-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9a7a5a;margin-bottom:4px}.to-name{font-weight:bold;font-size:14px;margin-bottom:2px}.to-detail{font-size:12px;color:#5a3a1a;line-height:1.6}.job-title{font-weight:bold;font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:18px 0 12px;border-bottom:1px solid #d4b87a;padding-bottom:6px}table{width:100%;border-collapse:collapse}th{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9a7a5a;padding:6px 8px;text-align:left;background:#f5edd8;border-bottom:1px solid #d4b87a}td{padding:12px 8px;vertical-align:top;border-bottom:1px solid #ecdcc0;word-break:break-word}.totals{max-width:220px;margin-left:auto;margin-top:16px}.tr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e8dcc0;font-size:13px}.tr.grand{font-weight:bold;font-size:15px;border-top:2px solid #FFC425;border-bottom:none;padding-top:8px;margin-top:4px}.notes{margin-top:20px;padding-top:12px;border-top:1px solid #d4b87a;font-size:12px;color:#7a5a3a;font-style:italic}.sig{display:flex;gap:30px;margin-top:30px}.sig-block{flex:1;border-top:1px solid #9a7a5a;padding-top:4px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#9a7a5a}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style>
   </head><body><div class="wrap">
-  <div class="header"><div><div class="brand-name">Curio Handyman Co.</div><div class="brand-sub">hello@curiohandyman.com</div><div class="brand-sub">(360) 555-0000</div></div>
+  <div class="header"><div><div class="brand-name">Curio Handyman Co.</div><div class="brand-sub">ericimpola@gmail.com</div><div class="brand-sub">(425) 319-5855</div></div>
   <div class="meta"><div class="meta-badge">ESTIMATE</div><div># ${String(q.num).padStart(3,'0')}</div><div>Date: ${formatDate(q.date)}</div><div>Valid until: ${formatDate(q.valid)}</div></div></div>
-  <div style="margin-bottom:16px;"><div class="to-label">Prepared For</div><div class="to-name">${c ? c.fname+' '+c.lname : ''}</div>${c&&c.phone?`<div class="to-detail">${c.phone}</div>`:''} ${c&&c.email?`<div class="to-detail">${c.email}</div>`:''} ${c&&(c.address||c.city)?`<div class="to-detail">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')}</div>`:''}</div>
+  <div style="margin-bottom:16px;"><div class="to-label">Prepared For</div><div class="to-name">${c ? c.fname+' '+c.lname : ''}</div>${c&&c.phone?`<div class="to-detail">${c.phone}</div>`:''}${c&&c.email?`<div class="to-detail">${c.email}</div>`:''} ${c&&(c.address||c.city)?`<div class="to-detail">${[c.address,c.city,c.state,c.zip].filter(Boolean).join(', ')}</div>`:''}</div>
   <div class="job-title">${q.desc}</div>
   <table><thead><tr><th>Tasks</th></tr></thead><tbody>${itemsHtml}</tbody></table>
   <div class="totals"><div class="tr"><span>Subtotal</span><span>$${(+q.subtotal||0).toFixed(2)}</span></div><div class="tr"><span>Tax (${q.taxPct}%)</span><span>$${(+q.taxAmt||0).toFixed(2)}</span></div><div class="tr grand"><span>Total</span><span>$${(+q.total||0).toFixed(2)}</span></div></div>
@@ -1789,7 +1792,7 @@ function generateInvoice() {
     taxAmt = q.taxAmt || 0;
     total = q.total || 0;
     lineItems = q.items.map(i => `<tr>
-      <td>${i.desc}${i.details ? `<div style="font-size:11px;color:#7a5a3a;font-style:italic;margin-top:2px;">${i.details}</div>` : ''}</td>
+      <td>${i.desc}${i.details ? `<div style="font-size:11px;color:#7a5a3a;font-style:italic;margin-top:2px;">${i.details.replace(/\n/g, '<br/>')}</div>` : ''}</td>
     </tr>`).join('');
   } else if (j.tasks && j.tasks.length) {
     j.tasks.forEach(t => {
@@ -1839,8 +1842,8 @@ function generateInvoice() {
   <div class="header">
     <div>
       <div class="brand-name">Curio Handyman Co.</div>
-      <div class="brand-sub">hello@curiohandyman.com</div>
-      <div class="brand-sub">(360) 555-0000</div>
+      <div class="brand-sub">ericimpola@gmail.com</div>
+      <div class="brand-sub">(425) 319-5855</div>
     </div>
     <div class="meta">
       <div class="meta-badge">INVOICE</div>
