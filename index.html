@@ -154,9 +154,15 @@ header {
 .services-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2.5rem 3rem;
+  gap: 1.25rem;
 }
-.service-item { }
+.service-item {
+  background: #130c06;
+  border: 1px solid rgba(255,196,37,0.15);
+  padding: 1.5rem 1.25rem;
+  transition: border-color 0.2s;
+}
+.service-item:hover { border-color: rgba(255,196,37,0.5); }
 .service-name {
   font-family: 'Archivo Narrow', sans-serif;
   font-weight: 700; font-size: 1rem;
@@ -403,7 +409,7 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
   .desktop-only { display: none !important; }
   .mobile-only { display: flex !important; }
   .hamburger { color: #fff !important; }
-  .services-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 2.5rem; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
   .about-photos { grid-template-columns: repeat(2, 1fr); }
   .about-photo:nth-child(1), .about-photo:nth-child(2),
   .about-photo:nth-child(3), .about-photo:nth-child(4) {
@@ -435,7 +441,7 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
   #services, #about, #gallery .gallery-header, #contact { padding-left: 1.5rem; padding-right: 1.5rem; }
   .gallery-track { padding: 0 2rem; gap: 1rem; }
   .gallery-track-wrap { scroll-snap-type: x mandatory; scroll-padding: 0 11vw; }
-  .services-grid { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; gap: 0.75rem; }
   .about-photos { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
   .about-photo:nth-child(1), .about-photo:nth-child(2),
   .about-photo:nth-child(3), .about-photo:nth-child(4) {
@@ -617,12 +623,7 @@ footer img { height: 32px; width: auto; opacity: 0.8; }
           <a href="mailto:ericimpola@gmail.com">ericimpola@gmail.com</a>
         </div>
       </div>
-      <div class="contact-detail">
-        <div>
-          <span class="contact-label">Phone</span>
-          <a href="tel:4253195855">(425) 319-5855</a>
-        </div>
-      </div>
+
 
     </div>
     <div>
